@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "project_root": "D:\\jimeng\\我的嫁妆，谁也别想拿去飞升",
+  "image_dir": "图片",
+  "asset_dir_name": "资产",
+  "shot_dir_name": "镜头",
+  "workflow_dir": ".workflow",
+  "download_dir": ".workflow\\downloads",
+  "rejected_dir": ".workflow\\rejected",
+  "max_chapters_per_run": 2,
+  "image_retry_limit": 4,
+  "video_retry_limit": 3,
+  "minimum_free_bytes": 5368709120,
+  "reserved_last_account": "fei-1",
+  "account_generation_limit": 3,
+  "chatgpt": {
+    "url": "https://chatgpt.com/",
+    "model": "gpt-image-2",
+    "new_chat_per_character_asset": true
+  },
+  "doubao": {
+    "url": "https://www.doubao.com/",
+    "model": "Seedance 2.0 Fast",
+    "ratio": "16:9",
+    "max_images_per_shot": 9,
+    "watermark_free_resource": "latest"
+  },
+  "aliases": {
+    "沈清梧": "沈青梧"
+  }
+}

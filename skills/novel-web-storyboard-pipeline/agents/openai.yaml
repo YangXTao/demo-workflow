@@ -1,0 +1,6 @@
+interface:
+  display_name: "Novel Web Storyboard Pipeline"
+  short_description: "Unattended ChatGPT-to-Doubao chapter production"
+  default_prompt: "Use $novel-web-storyboard-pipeline to process one or two novel chapters unattended."
+policy:
+  allow_implicit_invocation: true
