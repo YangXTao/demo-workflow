@@ -23,7 +23,8 @@
     "model": "Seedance 2.0 Fast",
     "ratio": "16:9",
     "max_images_per_shot": 9,
-    "watermark_free_resource": "latest"
+    "watermark_free_resource": "latest",
+    "auto_confirm_generation_dialogs": false
   },
   "aliases": {
     "沈清梧": "沈青梧"

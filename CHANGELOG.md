@@ -6,6 +6,7 @@
 - Treat timed-out uploads as unknown outcomes and require visible attachment count/order verification before retrying.
 - Add a hard per-shot asset validator so missing files and `pending_generation` assets cannot reach Doubao.
 - Normalize indexed filenames without extensions and handle Chinese list punctuation so conservative reuse candidates are not missed.
+- Handle Doubao's duplicate clipboard thumbnails and optionally auto-confirm material/generation dialogs without accepting payment, permission, login, or quota changes.
 
 ## v0.1.0 - 2026-08-24
 
