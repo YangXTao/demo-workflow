@@ -12,6 +12,10 @@ For the current shot, verify:
 - The prompt pasted is the complete code block for the same `SG`.
 - No earlier job for the same shot is still pending.
 
+Run `scripts/validate_shot_assets.py --manifest <manifest> --shot <SG-ID>` immediately before upload. Do not submit if any binding path is absent, any binding is unresolved, or its manifest asset still has `pending_generation` status. A predicted output filename is not an existing asset.
+
+Upload one image at a time. After each upload, count the visible attachments and verify their order. If the browser action times out or the control connection closes, treat the outcome as unknown: reconnect and inspect the attachments before any retry. Never paste the same image again until the previous attempt is proven absent.
+
 ## Submission and wait
 
 Submit one shot at a time. Record account label, submission time, shot ID, and visible job state. Poll visible state without repeatedly clicking generate. A timeout is not proof of failure.

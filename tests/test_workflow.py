@@ -19,6 +19,7 @@ from download_watch import promote, snapshot  # noqa: E402
 from image_tools import normalize_png  # noqa: E402
 from media_tools import extract_tail, inspect_video  # noqa: E402
 from state_cli import initialize, record_account, set_shot, summary  # noqa: E402
+from validate_shot_assets import validate_shot_assets  # noqa: E402
 from workflow_common import chapter_number_from_name, chinese_number_to_int  # noqa: E402
 
 
@@ -139,6 +140,29 @@ location prompt
             report = summary(db)
             self.assertIn({"status": "downloaded", "count": 1}, report["shots"])
             self.assertEqual(report["accounts"][0]["used"], 1)
+
+    def test_video_gate_rejects_pending_and_missing_assets(self) -> None:
+        with tempfile.TemporaryDirectory() as value:
+            config, chapter, index = self._fixture(Path(value))
+            manifest = build_manifest(config, chapter, index)
+            report = validate_shot_assets(manifest, "SG-001")
+            self.assertFalse(report["ok"])
+            self.assertTrue(any("pending_generation" in error for error in report["errors"]))
+            self.assertTrue(any("does not exist" in error for error in report["errors"]))
+
+    def test_video_gate_accepts_resolved_files(self) -> None:
+        with tempfile.TemporaryDirectory() as value:
+            root = Path(value)
+            config, chapter, index = self._fixture(root)
+            manifest = build_manifest(config, chapter, index)
+            location = root / "location.png"
+            location.write_bytes(PNG_1X1)
+            location_asset = next(item for item in manifest["assets"] if item["asset_id"] == "LOC-002-P01")
+            location_asset["status"] = "generated"
+            location_asset["output_path"] = str(location)
+            manifest["shots"][0]["bindings"][1]["path"] = str(location)
+            report = validate_shot_assets(manifest, "SG-001")
+            self.assertTrue(report["ok"], report["errors"])
 
     def test_download_promotion_is_non_destructive(self) -> None:
         with tempfile.TemporaryDirectory() as value:

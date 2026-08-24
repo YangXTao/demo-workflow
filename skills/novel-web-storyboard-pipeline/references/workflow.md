@@ -49,6 +49,14 @@ Process independent shots after a blocked branch only when their required assets
 
 Before clicking download, run `scripts/download_watch.py snapshot`. After the click, use `scripts/download_watch.py wait` and accept only a newly created completed file. Ignore `.crdownload`, zero-byte files, and old files. Validate it, then use `scripts/download_watch.py promote` to move it to the expected chapter shot path. Never select a file merely because it is newest before the download action.
 
+## Browser recovery and upload uncertainty
+
+Website authentication and browser-control state are independent. If a controlled tab becomes stale or explicitly disconnects, keep the signed-in browser session, discard the stale tab binding, and obtain one fresh controlled tab. Do not repeatedly reuse a failed handle or ask the user to sign in when the fresh tab visibly remains authenticated.
+
+Keep slow browser operations separate so each result can be observed. After every image upload, verify the actual visible attachment count and order before the next upload. A timeout or closed control pipe means the result is unknown, not failed: reconnect and inspect first. Retry only when the attachment is proven absent; if it is present twice, remove the duplicate before continuing.
+
+When the website's binary paste path is unstable, a temporary high-quality transfer copy is allowed. Preserve the original dimensions, leave the accepted source asset unchanged, keep a source-to-transfer mapping, and use the transfer copy only for browser upload.
+
 ## Retries
 
 - Image rejection: start another fresh ChatGPT conversation for character assets. Stop after `image_retry_limit`.

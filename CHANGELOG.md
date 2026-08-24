@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Recover from stale browser-control tabs without confusing them with website logout.
+- Treat timed-out uploads as unknown outcomes and require visible attachment count/order verification before retrying.
+- Add a hard per-shot asset validator so missing files and `pending_generation` assets cannot reach Doubao.
+
 ## v0.1.0 - 2026-08-24
 
 - Add the portable `novel-web-storyboard-pipeline` Codex skill.
