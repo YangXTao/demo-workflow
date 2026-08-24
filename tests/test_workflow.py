@@ -14,7 +14,7 @@ REPO = Path(__file__).resolve().parents[1]
 SCRIPTS = REPO / "skills" / "novel-web-storyboard-pipeline" / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
-from build_run_manifest import _best_existing, build_manifest  # noqa: E402
+from build_run_manifest import _best_existing, _eligible_assets_for_shot, build_manifest  # noqa: E402
 from download_watch import promote, snapshot  # noqa: E402
 from image_tools import normalize_png  # noqa: E402
 from media_tools import extract_tail, inspect_video  # noqa: E402
@@ -45,6 +45,15 @@ class WorkflowTests(unittest.TestCase):
         scene = {"title": "万宗大会环形广场、投影高台与城北远景", "kind": "LOC", "reference_files": []}
         self.assertEqual(_best_existing(look, index, {}), "C:/assets/沈青梧-三视图.png")
         self.assertEqual(_best_existing(scene, index, {}), "C:/assets/scene.png")
+
+    def test_binding_candidates_are_limited_to_applicable_shot(self) -> None:
+        assets = [
+            {"asset_id": "PROP-001-P01", "applicable_shots": ["SG-015"]},
+            {"asset_id": "CHAR-005-P01", "applicable_shots": ["SG-002"]},
+            {"asset_id": "LOC-001-P01", "applicable_shots": []},
+        ]
+        eligible = _eligible_assets_for_shot(assets, "SG-015")
+        self.assertEqual([item["asset_id"] for item in eligible], ["PROP-001-P01", "LOC-001-P01"])
 
     def _fixture(self, root: Path) -> tuple[Path, Path, Path]:
         project = root / "小说"

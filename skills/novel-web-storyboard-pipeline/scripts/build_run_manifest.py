@@ -165,6 +165,15 @@ def _match_binding(description: str, eligible: list[dict[str, Any]], aliases: di
     return result if score >= 0.05 else None
 
 
+def _eligible_assets_for_shot(assets: list[dict[str, Any]], shot_id: str) -> list[dict[str, Any]]:
+    """Keep bindings inside the asset authoring scope declared for the shot."""
+    return [
+        asset
+        for asset in assets
+        if not asset.get("applicable_shots") or shot_id in asset["applicable_shots"]
+    ]
+
+
 def build_manifest(config_path: Path, chapter_dir: Path, asset_index_path: Path | None = None) -> dict[str, Any]:
     config, project_root = load_config(config_path)
     chapter_dir = chapter_dir.resolve()
@@ -195,6 +204,7 @@ def build_manifest(config_path: Path, chapter_dir: Path, asset_index_path: Path 
         if len(shot["bindings"]) > max_images:
             raise ValueError(f"{shot['shot_id']} requests {len(shot['bindings'])} images; limit is {max_images}")
         used_asset_ids: set[str] = set()
+        shot_assets = _eligible_assets_for_shot(assets, shot["shot_id"])
         for binding in shot["bindings"]:
             if binding["order"] == 1 and shot["transition"] == "尾帧直续":
                 previous = shots[position - 2] if position > 1 else None
@@ -206,10 +216,10 @@ def build_manifest(config_path: Path, chapter_dir: Path, asset_index_path: Path 
                     }
                 )
                 continue
-            unused = [asset for asset in assets if asset["asset_id"] not in used_asset_ids]
+            unused = [asset for asset in shot_assets if asset["asset_id"] not in used_asset_ids]
             matched = _match_binding(binding["description"], unused, aliases)
             if matched is None:
-                matched = _match_binding(binding["description"], assets, aliases)
+                matched = _match_binding(binding["description"], shot_assets, aliases)
             if matched:
                 used_asset_ids.add(matched["asset_id"])
             binding.update(
