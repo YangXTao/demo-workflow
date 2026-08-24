@@ -14,7 +14,7 @@ For the current shot, verify:
 
 Run `scripts/validate_shot_assets.py --manifest <manifest> --shot <SG-ID>` immediately before upload. Do not submit if any binding path is absent, any binding is unresolved, or its manifest asset still has `pending_generation` status. A predicted output filename is not an existing asset.
 
-Upload one image at a time. After each upload, count the visible attachments and verify their order. If the browser action times out or the control connection closes, treat the outcome as unknown: reconnect and inspect the attachments before any retry. Never paste the same image again until the previous attempt is proven absent.
+Upload one image at a time. Never batch multiple binary clipboard items into one paste; Doubao can close the browser-control channel before returning an outcome. After each upload, count the visible attachments and verify their order. If the browser action times out or the control connection closes, treat the outcome as unknown: reconnect and inspect the attachments before any retry. Never paste the same image again until the previous attempt is proven absent.
 
 Doubao may render two identical thumbnails from one clipboard paste. When the just-uploaded asset appears twice, remove only the later duplicate and verify that one copy remains in the intended order before uploading the next image.
 

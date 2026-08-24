@@ -7,6 +7,7 @@
 - Add a hard per-shot asset validator so missing files and `pending_generation` assets cannot reach Doubao.
 - Normalize indexed filenames without extensions and handle Chinese list punctuation so conservative reuse candidates are not missed.
 - Handle Doubao's duplicate clipboard thumbnails and optionally auto-confirm material/generation dialogs without accepting payment, permission, login, or quota changes.
+- Disallow multi-image clipboard batching after confirming that Doubao can drop the control connection before reporting the paste result.
 
 ## v0.1.0 - 2026-08-24
 
