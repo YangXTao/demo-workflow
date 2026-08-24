@@ -125,8 +125,8 @@ def normalize_name(value: str, aliases: dict[str, str] | None = None) -> str:
         value = canonical_alias(value, aliases)
     value = value.lower()
     value = re.sub(r"第[0-9〇零一二两三四五六七八九十百千]+章", "", value)
-    value = re.sub(r"(三视图|四视图|形象|设定图|概念图|图片|资产|道具|场景)", "", value)
-    value = re.sub(r"[\s\-_—–·|()（）\[\]【】,，.。:：'\"]+", "", value)
+    value = re.sub(r"(三视图|四视图|形象|设定图|概念图|场景图|图片|资产|道具|场景)", "", value)
+    value = re.sub(r"[\s\-_—–·|()（）\[\]【】,，、.。:：'\"]+", "", value)
     return value
 
 

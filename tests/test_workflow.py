@@ -14,7 +14,7 @@ REPO = Path(__file__).resolve().parents[1]
 SCRIPTS = REPO / "skills" / "novel-web-storyboard-pipeline" / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
-from build_run_manifest import build_manifest  # noqa: E402
+from build_run_manifest import _best_existing, build_manifest  # noqa: E402
 from download_watch import promote, snapshot  # noqa: E402
 from image_tools import normalize_png  # noqa: E402
 from media_tools import extract_tail, inspect_video  # noqa: E402
@@ -33,6 +33,18 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual(chinese_number_to_int("二十八"), 28)
         self.assertEqual(chinese_number_to_int("一百零二"), 102)
         self.assertEqual(chapter_number_from_name("第二十八章"), 28)
+
+    def test_asset_matching_ignores_extension_and_chinese_punctuation(self) -> None:
+        index = {
+            "assets": [
+                {"filename": "沈青梧-三视图.png", "path": "C:/assets/沈青梧-三视图.png"},
+                {"filename": "万宗大会环形广场-投影高台与城北远景-第28章-场景图.png", "path": "C:/assets/scene.png"},
+            ]
+        }
+        look = {"title": "沈青梧·万宗大会蓝金举证造型", "kind": "LOOK", "reference_files": []}
+        scene = {"title": "万宗大会环形广场、投影高台与城北远景", "kind": "LOC", "reference_files": []}
+        self.assertEqual(_best_existing(look, index, {}), "C:/assets/沈青梧-三视图.png")
+        self.assertEqual(_best_existing(scene, index, {}), "C:/assets/scene.png")
 
     def _fixture(self, root: Path) -> tuple[Path, Path, Path]:
         project = root / "小说"

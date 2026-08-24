@@ -95,7 +95,8 @@ def _index_candidates(index: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def _candidate_name(item: dict[str, Any]) -> str:
-    return str(item.get("name") or item.get("filename") or Path(str(item.get("path", ""))).stem)
+    value = str(item.get("name") or item.get("filename") or item.get("path", ""))
+    return Path(value).stem
 
 
 def _candidate_path(item: dict[str, Any]) -> str:
