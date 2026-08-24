@@ -26,6 +26,8 @@ After upload or submission, inspect any visible confirmation dialog. When `douba
 
 Submit one shot at a time. Record account label, submission time, shot ID, and visible job state. Poll visible state without repeatedly clicking generate. A timeout is not proof of failure.
 
+If a job remains visibly submitted for longer than `doubao.pending_stale_minutes` with no downloadable result and no failure message, preserve the old job and classify it as server-stale. Resubmit the shot once on a different non-reserved account, after repeating the full upload gate. Accept the first valid result that arrives and ignore any later duplicate. Never delete the old conversation and never resubmit more than once solely because it is slow.
+
 ## Download
 
 When the shot completes, open the watermark-free resource panel. Doubao always renumbers the newest generated result as `视频1`, so click the download button on the top `视频1` row only; never infer the target from a cumulative resource number such as `视频2` or `视频3`. Snapshot the download directory before clicking. Click once, wait for a new completed file, validate its duration and readability, then move it to `<chapter>/镜头/<chapter-number>-<shot-number>.mp4`.

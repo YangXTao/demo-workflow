@@ -24,7 +24,8 @@
     "ratio": "16:9",
     "max_images_per_shot": 9,
     "watermark_free_resource": "latest",
-    "auto_confirm_generation_dialogs": false
+    "auto_confirm_generation_dialogs": false,
+    "pending_stale_minutes": 60
   },
   "aliases": {
     "沈清梧": "沈青梧"

@@ -10,6 +10,7 @@
 - Disallow multi-image clipboard batching after confirming that Doubao can drop the control connection before reporting the paste result.
 - Raise the per-image upload timeout to 60 seconds and restart from a clean composer when an unsubmitted stale page cannot be reclaimed promptly.
 - Restrict storyboard binding candidates to assets explicitly applicable to the current shot, preventing cross-shot image misbinding.
+- Recover once from a server-stale Doubao job by preserving it and resubmitting on a different non-reserved account after a configurable timeout.
 
 ## v0.1.0 - 2026-08-24
 
