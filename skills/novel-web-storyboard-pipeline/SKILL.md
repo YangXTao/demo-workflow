@@ -63,7 +63,7 @@ Use only the Doubao website. Select `Seedance 2.0 Fast`, `16:9`, and the manifes
 
 For `尾帧直续`, extract the preceding accepted video's last frame and upload it as `@图片1`. For `匹配切`, `时空硬切`, or the chapter opening, do not inject a previous tail frame.
 
-Wait for the current job to finish, download the newest watermark-free resource, wait until the partial download disappears, then move and rename it to `<chapter-number>-<shot-number>.mp4`. Validate it before starting the next shot.
+Wait for the current job to finish. In Doubao's watermark-free resource panel, the newest generated result is always renumbered as `视频1`; download only the top `视频1` row for the just-completed shot, regardless of how many older resources are listed. Wait until the partial download disappears, then move and rename it to `<chapter-number>-<shot-number>.mp4`. Validate its duration and readability before starting the next shot.
 
 Rotate Doubao accounts only when the current account reaches its actual page-reported limit. Track submissions and results locally. Reserve account `fei-1` until every other available account is exhausted.
 

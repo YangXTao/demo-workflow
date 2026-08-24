@@ -18,7 +18,7 @@ Submit one shot at a time. Record account label, submission time, shot ID, and v
 
 ## Download
 
-When the shot completes, use the newest watermark-free resource associated with the current job. Snapshot the download directory before clicking. Click once, wait for a new completed file, validate it, then move it to `<chapter>/镜头/<chapter-number>-<shot-number>.mp4`.
+When the shot completes, open the watermark-free resource panel. Doubao always renumbers the newest generated result as `视频1`, so click the download button on the top `视频1` row only; never infer the target from a cumulative resource number such as `视频2` or `视频3`. Snapshot the download directory before clicking. Click once, wait for a new completed file, validate its duration and readability, then move it to `<chapter>/镜头/<chapter-number>-<shot-number>.mp4`.
 
 ## Tail frames
 
