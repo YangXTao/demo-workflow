@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 import subprocess
 from pathlib import Path
@@ -15,6 +16,35 @@ def _cv2() -> Any:
         return cv2
     except ImportError:
         return None
+
+
+def _playwright_backend() -> tuple[str, Path] | None:
+    """Use the bundled Node/Playwright runtime when video codecs are otherwise absent."""
+    helper = Path(__file__).with_name("playwright_video_backend.cjs")
+    if not helper.is_file():
+        return None
+    node = shutil.which("node")
+    if node:
+        return node, helper
+    bundled = Path.home() / ".cache" / "codex-runtimes" / "codex-primary-runtime" / "dependencies" / "node" / "bin" / "node.exe"
+    if bundled.is_file():
+        return str(bundled), helper
+    configured = os.environ.get("CODEX_NODE_PATH")
+    if configured and Path(configured).is_file():
+        return configured, helper
+    return None
+
+
+def _playwright_video(command: str, input_path: Path, output_path: Path | None = None) -> dict[str, Any]:
+    backend = _playwright_backend()
+    if backend is None:
+        raise RuntimeError("Bundled Node/Playwright video backend is unavailable")
+    node, helper = backend
+    args = [node, str(helper), command, str(input_path)]
+    if output_path is not None:
+        args.append(str(output_path))
+    result = subprocess.run(args, check=True, capture_output=True, text=True, encoding="utf-8")
+    return json.loads(result.stdout)
 
 
 def inspect_video(path: Path) -> dict[str, Any]:
@@ -40,7 +70,7 @@ def inspect_video(path: Path) -> dict[str, Any]:
             capture.release()
     ffprobe = shutil.which("ffprobe")
     if not ffprobe:
-        raise RuntimeError("Neither OpenCV nor ffprobe is available")
+        return _playwright_video("inspect", path)
     result = subprocess.run(
         [ffprobe, "-v", "error", "-show_entries", "stream=width,height,nb_frames,r_frame_rate:format=duration,size", "-of", "json", str(path)],
         check=True,
@@ -97,7 +127,7 @@ def extract_tail(input_path: Path, output_path: Path, force: bool = False) -> di
         return {"ok": True, "input": str(input_path), "output": str(output_path), "backend": "opencv"}
     ffmpeg = shutil.which("ffmpeg")
     if not ffmpeg:
-        raise RuntimeError("Neither OpenCV nor ffmpeg is available")
+        return _playwright_video("extract-tail", input_path, output_path)
     subprocess.run(
         [ffmpeg, "-y" if force else "-n", "-sseof", "-0.1", "-i", str(input_path), "-frames:v", "1", str(output_path)],
         check=True,

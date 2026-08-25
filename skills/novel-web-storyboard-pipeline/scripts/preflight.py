@@ -14,11 +14,15 @@ def check_backend() -> dict[str, object]:
     cv2_available = importlib.util.find_spec("cv2") is not None
     ffmpeg = shutil.which("ffmpeg")
     ffprobe = shutil.which("ffprobe")
+    helper = Path(__file__).with_name("playwright_video_backend.cjs")
+    bundled_node = Path.home() / ".cache" / "codex-runtimes" / "codex-primary-runtime" / "dependencies" / "node" / "bin" / "node.exe"
+    playwright = helper.is_file() and (bool(shutil.which("node")) or bundled_node.is_file())
     return {
         "cv2": cv2_available,
         "ffmpeg": ffmpeg,
         "ffprobe": ffprobe,
-        "usable": cv2_available or bool(ffmpeg),
+        "playwright": playwright,
+        "usable": cv2_available or bool(ffmpeg) or playwright,
     }
 
 
@@ -86,9 +90,11 @@ def main() -> int:
 
     backend = check_backend()
     if not backend["usable"]:
-        errors.append("Neither OpenCV nor ffmpeg is available for video validation and tail-frame extraction")
-    elif not backend["ffmpeg"]:
+        errors.append("Neither OpenCV, ffmpeg, nor the bundled Playwright video backend is available")
+    elif not backend["ffmpeg"] and backend["cv2"]:
         warnings.append("ffmpeg is absent; OpenCV will be used as the video backend")
+    elif not backend["ffmpeg"]:
+        warnings.append("ffmpeg and OpenCV are absent; bundled Playwright will be used for local video validation and tail extraction")
 
     report = {
         "ok": not errors,

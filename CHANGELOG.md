@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.3.1 - 2026-08-25
+
+- Add a bundled Node/Playwright local-video fallback for inspection and tail-frame extraction when OpenCV or FFmpeg are unavailable.
+- Add a safe, ordered Windows copy-and-paste material-upload recovery path after the verified Chrome file-chooser flow fails.
+
 ## Unreleased
 
 ## v0.3.0 - 2026-08-25
