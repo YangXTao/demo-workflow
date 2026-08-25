@@ -14,11 +14,11 @@ For the current shot, verify:
 
 Run `scripts/validate_shot_assets.py --manifest <manifest> --shot <SG-ID>` immediately before upload. Do not submit if any binding path is absent, any binding is unresolved, or its manifest asset still has `pending_generation` status. A predicted output filename is not an existing asset.
 
-Upload one image at a time. Never batch multiple binary clipboard items into one paste; Doubao can close the browser-control channel before returning an outcome. After each upload, count the visible attachments and verify their order. If the browser action times out or the control connection closes, treat the outcome as unknown: reconnect and inspect the attachments before any retry. Never paste the same image again until the previous attempt is proven absent.
+Use the visible `+` material button and the browser file-chooser flow. Start `waitForEvent("filechooser")`, click that visible button, then call `chooser.setFiles()` once with all binding paths in their manifest order. Check `chooser.isMultiple()` first. This avoids both the duplicate-thumbnail behavior and the unreliable binary-clipboard transport.
 
-Allow up to 60 seconds for each clipboard upload action. If a timed-out page cannot be reclaimed promptly, abandon that unsubmitted page, open a fresh Doubao page, restore the model/ratio/duration settings, and restart the shot from an empty composer. Do not keep calling a stale tab handle. Because the abandoned composer was never submitted, it does not consume a generation quota.
+Do not click the hidden `input[type=file]` directly: it may not open a chooser. Do not use `locator.setInputFiles`; the supported surface is the file chooser. If a chooser upload fails, inspect whether its thumbnails appeared before retrying; if it did not, reconnect, retain the same unsubmitted composer when possible, and repeat the visible-`+` chooser flow. Do not open a native picker or request manual file selection.
 
-Doubao may render two identical thumbnails from one clipboard paste. When the just-uploaded asset appears twice, remove only the later duplicate and verify that one copy remains in the intended order before uploading the next image. Prefer the duplicate thumbnail's own delete button: locate the last `img[alt="clipboard.jpeg"]`, target its parent card's `button.delete-btn-*`, hover the card if the button is hidden, then click it. Do not use an unqualified coordinate delete; it can remove the wrong reference after the strip shifts.
+After `setFiles`, visually verify that the attachment strip has exactly the manifest's number of thumbnails and that its left-to-right order matches `@图片1` through `@图片N`. If that verification fails, remove only the unexpected attachment or restart the unsubmitted composer; never submit an ambiguous strip.
 
 After upload or submission, inspect any visible confirmation dialog. When `doubao.auto_confirm_generation_dialogs` is enabled and the dialog only confirms using the uploaded materials or continuing the already-authorized video generation, click its confirm button automatically. Do not auto-confirm login, CAPTCHA, payment, purchase, permission-sharing, quota-upgrade, or materially changed generation settings.
 
@@ -35,6 +35,12 @@ When the shot completes, open the watermark-free resource panel. Doubao always r
 ## Tail frames
 
 When the next shot is `尾帧直续`, run `scripts/media_tools.py extract-tail`. Save `<chapter-number>-<current-shot-number>-尾帧.png` in the same shot directory and bind it as the next shot's `@图片1`.
+
+## Battle visual QC and rework
+
+After every chapter is downloaded, visually sample the battle setup, primary attack, impact/aftermath, and any spectacle reveal. Pass only when the shots show readable action cause and effect plus a cinematic hierarchy of energy: substantial volumetric light, environmental reaction, layered particles/debris, directional shock or pressure effects, and a scale contrast appropriate to the scene. A named ultimate move or heavenly spectacle must not degrade into isolated glow lines, sparse sparks, a white flash, or an unlit close-up.
+
+For a failed battle shot, preserve the original `<chapter>-<shot>.mp4`. Produce a revised prompt that specifies the missing scale, energy layers, light direction, environmental deformation, camera response, and prohibitions against cheap effects. Regenerate it as `<chapter>-<shot>-重制-v1.mp4` (increment the version for later attempts) and use that variant's tail frame for any directly continuous rework. Keep both variants; do not overwrite or delete the original.
 
 ## Account rotation
 
