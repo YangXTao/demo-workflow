@@ -220,6 +220,16 @@ def build_manifest(config_path: Path, chapter_dir: Path, asset_index_path: Path 
             matched = _match_binding(binding["description"], unused, aliases)
             if matched is None:
                 matched = _match_binding(binding["description"], shot_assets, aliases)
+            # Prompt authors occasionally omit a scene or prop from an
+            # asset's ``applicable_shots`` list while explicitly requesting
+            # it in a storyboard binding.  A conservative description match
+            # against the complete package is safer than emitting a null
+            # binding that only fails later during video upload validation.
+            if matched is None:
+                all_unused = [asset for asset in assets if asset["asset_id"] not in used_asset_ids]
+                matched = _match_binding(binding["description"], all_unused, aliases)
+            if matched is None:
+                matched = _match_binding(binding["description"], assets, aliases)
             if matched:
                 used_asset_ids.add(matched["asset_id"])
             binding.update(

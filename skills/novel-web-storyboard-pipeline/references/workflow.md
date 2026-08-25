@@ -53,6 +53,8 @@ Before clicking download, run `scripts/download_watch.py snapshot`. After the cl
 
 Website authentication and browser-control state are independent. If a controlled tab becomes stale or explicitly disconnects, keep the signed-in browser session, discard the stale tab binding, and obtain one fresh controlled tab. Do not repeatedly reuse a failed handle or ask the user to sign in when the fresh tab visibly remains authenticated.
 
+At recovery and between shots, close stale, blank, error, and duplicate agent-created tabs. Keep only the current task tab and any page that still represents a genuinely pending generation. Prefer reusing the last healthy task tab for the next conversation. Never close the browser's final tab merely to clean up; navigate or reuse it first so cleanup does not terminate the signed-in browser process.
+
 Keep slow browser operations separate so each result can be observed. After every image upload, verify the actual visible attachment count and order before the next upload. A timeout or closed control pipe means the result is unknown, not failed: reconnect and inspect first. Retry only when the attachment is proven absent; if it is present twice, remove the duplicate before continuing.
 
 When the website's binary paste path is unstable, a temporary high-quality transfer copy is allowed. Preserve the original dimensions, leave the accepted source asset unchanged, keep a source-to-transfer mapping, and use the transfer copy only for browser upload.
