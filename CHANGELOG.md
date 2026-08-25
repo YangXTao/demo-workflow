@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Keep complete spoken dialogue in short Seedance shots by specifying controlled accelerated delivery (normally 1.10–1.35x) when ordinary pacing would overrun; return genuinely overlong lines for storyboard splitting instead of accepting a cutoff.
+- Keep complete spoken dialogue in short Seedance shots by specifying controlled accelerated delivery (normally 1.10–1.50x, selected for dialogue density, emotion, and intelligibility) when ordinary pacing would overrun; return genuinely overlong lines for storyboard splitting instead of accepting a cutoff.
 - Add a multi-character staging gate: explicit depth and screen lanes, staggered actions, stable camera axis, and prohibitions against body, robe, weapon, mount, and landing-plane intersections.
 
 - Recover from stale browser-control tabs without confusing them with website logout.

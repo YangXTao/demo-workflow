@@ -62,7 +62,7 @@ Save accepted assets with the rules in [naming-and-state.md](references/naming-a
 
 Use only the Doubao website. Select `Seedance 2.0 Fast`, `16:9`, and the manifest duration for each shot. Upload images in the exact `@图片1` to `@图片N` order from the manifest, then submit the complete corresponding prompt.
 
-For spoken shots, preserve the written line. If normal delivery cannot reasonably fit the selected duration, direct the specified voice to deliver the complete line at a clear controlled fast pace (normally 1.10–1.35x), rather than silently dropping the end of the line. Keep pronunciation intelligible and leave a short visual beat only when the line still finishes; the editor may retime the accepted clip later.
+For spoken shots, preserve the written line. If normal delivery cannot reasonably fit the selected duration, direct the specified voice to deliver the complete line at a clear controlled fast pace (normally 1.10–1.50x, chosen for dialogue density, emotion, and intelligibility), rather than silently dropping the end of the line. Keep pronunciation intelligible and leave a short visual beat only when the line still finishes; the editor may retime the accepted clip later.
 
 For two-or-more-character shots, include explicit foreground/midground/background or left/center/right staging, separate movement lanes, and a camera axis that keeps bodies, hands, weapons, and mounts from occupying the same space. Prefer cuts or shot/reverse-shot for close interaction. Do not ask the model to make multiple people cross through each other, share a landing point, or perform simultaneous close-range actions unless the prompt defines distinct depth, timing, and contact.
 
