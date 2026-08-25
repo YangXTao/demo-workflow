@@ -25,9 +25,10 @@ This skill coordinates `novel-chapter-3d-pipeline`; it does not duplicate that s
 1. Read [workflow.md](references/workflow.md).
 2. Read [chatgpt-image-flow.md](references/chatgpt-image-flow.md) before generating images.
 3. Read [doubao-video-flow.md](references/doubao-video-flow.md) before submitting videos.
-4. Load the project configuration. If absent, copy `assets/config.example.json` to `<project>/.workflow/config.json`, set `project_root`, and preserve user overrides.
-5. Run `scripts/preflight.py` for the requested one or two chapter directories. Do not submit work while a hard preflight error remains.
-6. Initialize or refresh the asset index with `scripts/build_asset_index.py`.
+4. Read [seedance-cinematic-prompt-craft.md](references/seedance-cinematic-prompt-craft.md) before generating, expanding, revising, submitting, or auditing combat, spell, giant-form, disaster, army, or other spectacle shots.
+5. Load the project configuration. If absent, copy `assets/config.example.json` to `<project>/.workflow/config.json`, set `project_root`, and preserve user overrides.
+6. Run `scripts/preflight.py` for the requested one or two chapter directories. Do not submit work while a hard preflight error remains.
+7. Initialize or refresh the asset index with `scripts/build_asset_index.py`.
 
 ## Production phases
 
@@ -61,6 +62,8 @@ Save accepted assets with the rules in [naming-and-state.md](references/naming-a
 ### 4. Generate videos in Doubao
 
 Use only the Doubao website. Select `Seedance 2.0 Fast`, `16:9`, and the manifest duration for each shot. Upload images in the exact `@图片1` to `@图片N` order from the manifest, then submit the complete corresponding prompt.
+
+Prompt completeness takes priority over brevity. For combat or spectacle shots, keep the full structured long prompt: a continuous time axis, action cause-and-effect, motivated camera changes, layered VFX and lighting, environment response, sound, exact end state, and shot-specific failure prohibitions. Do not shorten away execution-critical detail merely because another prompt looks shorter, and do not compensate with conflicting quality slogans.
 
 For spoken shots, preserve the written line. If normal delivery cannot reasonably fit the selected duration, direct the specified voice to deliver the complete line at a clear controlled fast pace (normally 1.10–1.50x, chosen for dialogue density, emotion, and intelligibility), rather than silently dropping the end of the line. Keep pronunciation intelligible and leave a short visual beat only when the line still finishes; the editor may retime the accepted clip later.
 

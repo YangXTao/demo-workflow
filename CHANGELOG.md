@@ -2,11 +2,25 @@
 
 ## Unreleased
 
+## v0.3.0 - 2026-08-25
+
+- Learn a structured long-prompt method from four user-supplied reference documents and six AI-donghua reference videos: continuous micro-beat timelines, complete action causality, three collision intensities, five-layer VFX, scale ladders, motivated camera changes, exposure protection, and aftermath-driven endings.
+- Add hard pre-submit and final QC gates for combat and spectacle prompts; prompt completeness now takes priority over brevity, while overloaded or contradictory beats must be split instead of piled into one shot.
+
+## v0.2.3 - 2026-08-25
+
 - Add a hard whole-chapter acceptance audit for dialogue completion, visual cheating, continuity, anatomy, intersection/clipping, and battle spectacle/impact; preserve all rejected originals and log evidence.
 - Support narrow editorial replacement clips for isolated defects, with locked edit-in/edit-out states and deterministic `局部重制` names, while retaining whole-shot rework for continuity or core-beat failures.
 
+## v0.2.2 - 2026-08-25
+
 - Keep complete spoken dialogue in short Seedance shots by specifying controlled accelerated delivery (normally 1.10–1.50x, selected for dialogue density, emotion, and intelligibility) when ordinary pacing would overrun; return genuinely overlong lines for storyboard splitting instead of accepting a cutoff.
+
+## v0.2.1 - 2026-08-25
+
 - Add a multi-character staging gate: explicit depth and screen lanes, staggered actions, stable camera axis, and prohibitions against body, robe, weapon, mount, and landing-plane intersections.
+
+## v0.2.0 - 2026-08-25
 
 - Recover from stale browser-control tabs without confusing them with website logout.
 - Treat timed-out uploads as unknown outcomes and require visible attachment count/order verification before retrying.
