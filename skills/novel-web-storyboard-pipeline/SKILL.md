@@ -78,7 +78,7 @@ Record every transition with `scripts/state_cli.py`. On restart, verify artifact
 
 Immediately before each Doubao submission, run `scripts/validate_shot_assets.py` for that shot. It is a hard gate: every manifest binding must resolve to an existing file, and an asset with `pending_generation` status must never be uploaded even if a similarly named path was predicted.
 
-Run `scripts/state_cli.py summary` at completion. A chapter is complete only when every Seedance group has a readable expected video, every required tail frame exists, no dependency remains blocked, and the completion report lists account usage and failures.
+Run `scripts/state_cli.py summary` at completion. A chapter is complete only when every Seedance group has a readable expected video, every required tail frame exists, no dependency remains blocked, and the completion report lists account usage and failures. Before declaring completion, conduct a whole-chapter shot-by-shot acceptance audit: dialogue must finish, continuity and anatomy must hold, and battle beats must meet the project's impact and spectacle standard. Rework failures while preserving every original.
 
 ## Failure boundaries
 

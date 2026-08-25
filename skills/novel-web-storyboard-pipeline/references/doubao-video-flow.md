@@ -48,6 +48,12 @@ After every chapter is downloaded, visually sample the battle setup, primary att
 
 For a failed battle shot, preserve the original `<chapter>-<shot>.mp4`. Produce a revised prompt that specifies the missing scale, energy layers, light direction, environmental deformation, camera response, and prohibitions against cheap effects. Regenerate it as `<chapter>-<shot>-重制-v1.mp4` (increment the version for later attempts) and use that variant's tail frame for any directly continuous rework. Keep both variants; do not overwrite or delete the original.
 
+## Whole-chapter acceptance audit and local repair
+
+After all canonical videos are available, review every shot in narrative order and record pass/fail. Reject a shot for unfinished dialogue, serious visual cheating, identity/costume discontinuity, anatomy failure, intersection or clipping, unwanted duplicate/disappearing subjects, broken spatial logic, or a direct-continuation state mismatch. For battle shots also reject insufficient energy layering, weak light/shadow contrast, missing physical impact, calm pacing, or an unconvincing spectacle scale.
+
+If the failure is confined to a short interval and the frames immediately before and after it are usable, submit a dedicated replacement interval rather than regenerating the whole shot. Use the two surrounding accepted states as first- and last-state references when supported by the current Doubao surface; otherwise state precise matching edit-in and edit-out conditions in the prompt. The interval prompt must identify the exact start/end seconds, camera axis, actor placement, and required repaired action. Save it as `<chapter>-<shot>-局部重制-v<version>-<start>-<end>.mp4`, preserve the original shot, and list it as an editorial insert rather than silently replacing the canonical file. Rebuild the full shot only when the defect spans the beat, breaks dialogue timing or continuity, or cannot cleanly rejoin both sides.
+
 ## Account rotation
 
 Read the account label from the visible account menu. Maintain local usage, but prefer the page's actual limit signal. After the current account is exhausted, select another available account. Exclude `fei-1` until all other accounts are unavailable or exhausted. Never store passwords or authentication tokens.

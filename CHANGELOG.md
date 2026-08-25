@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Add a hard whole-chapter acceptance audit for dialogue completion, visual cheating, continuity, anatomy, intersection/clipping, and battle spectacle/impact; preserve all rejected originals and log evidence.
+- Support narrow editorial replacement clips for isolated defects, with locked edit-in/edit-out states and deterministic `局部重制` names, while retaining whole-shot rework for continuity or core-beat failures.
+
 - Keep complete spoken dialogue in short Seedance shots by specifying controlled accelerated delivery (normally 1.10–1.50x, selected for dialogue density, emotion, and intelligibility) when ordinary pacing would overrun; return genuinely overlong lines for storyboard splitting instead of accepting a cutoff.
 - Add a multi-character staging gate: explicit depth and screen lanes, staggered actions, stable camera axis, and prohibitions against body, robe, weapon, mount, and landing-plane intersections.
 
