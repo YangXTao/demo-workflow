@@ -13,6 +13,13 @@
   "minimum_free_bytes": 5368709120,
   "reserved_last_account": "fei-1",
   "account_generation_limit": 3,
+  "browser": {
+    "family": "chrome",
+    "profile_directory": "Default",
+    "profile_label": "用户1",
+    "launch_when_unavailable": true,
+    "keep_one_user_tab_open": true
+  },
   "chatgpt": {
     "url": "https://chatgpt.com/",
     "model": "gpt-image-2",

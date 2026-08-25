@@ -53,11 +53,13 @@ Before clicking download, run `scripts/download_watch.py snapshot`. After the cl
 
 Website authentication and browser-control state are independent. If a controlled tab becomes stale or explicitly disconnects, keep the signed-in browser session, discard the stale tab binding, and obtain one fresh controlled tab. Do not repeatedly reuse a failed handle or ask the user to sign in when the fresh tab visibly remains authenticated.
 
-At recovery and between shots, close stale, blank, error, and duplicate agent-created tabs. Keep only the current task tab and any page that still represents a genuinely pending generation. Prefer reusing the last healthy task tab for the next conversation. Never close the browser's final tab merely to clean up; navigate or reuse it first so cleanup does not terminate the signed-in browser process.
+At recovery and between shots, close only confirmed stale, blank, error, or duplicate agent-created tabs. Keep a normal user-created Chrome tab open at all times, and use `browser.user.openTabs()` plus `claimTab()` to resume that tab after a control reconnect; agent-created tabs are ephemeral and are not a durable checkpoint. Never close the browser's final tab merely to clean up; navigate or reuse it first so cleanup does not terminate the signed-in browser process.
 
-Keep slow browser operations separate so each result can be observed. After every image upload, verify the actual visible attachment count and order before the next upload. A timeout or closed control pipe means the result is unknown, not failed: reconnect and inspect first. Retry only when the attachment is proven absent; if it is present twice, remove the duplicate before continuing.
+If Chrome is not running or the extension instance is absent, launch the configured browser profile once, wait for it to initialize, then reconnect and claim a currently listed user tab. For this project the configured profile is Chrome `Default` / visible label `用户1`; do not silently switch profiles. A stale control binding does not imply an expired website login. If the reconnect itself fails twice, preserve the existing normal tab and record the failure rather than repeatedly opening and closing windows.
 
-When the website's binary paste path is unstable, a temporary high-quality transfer copy is allowed. Preserve the original dimensions, leave the accepted source asset unchanged, keep a source-to-transfer mapping, and use the transfer copy only for browser upload.
+Keep slow browser operations separate so each result can be observed. Use the visible Doubao `+` button and one file-chooser batch in manifest order; after upload, verify the full visible attachment strip before entering the prompt. Do not use binary clipboard paste, hidden file inputs, or native manual file selection. A timeout or closed control pipe means the result is unknown, not failed: reconnect and inspect first. Retry only when the expected strip is proven absent.
+
+Upload the original accepted assets. Do not create `副本`, compressed, or transfer images merely to work around browser upload behavior. Create a transfer copy only after a verified file-chooser size/type rejection, retain the original unchanged, record the mapping, and delete the temporary transfer copy after the shot is successfully downloaded.
 
 ## Retries
 
@@ -69,3 +71,5 @@ When the website's binary paste path is unstable, a temporary high-quality trans
 ## Completion
 
 Write `<chapter>/镜头/完成报告.md` and `完成报告.json`. Include expected and actual shot counts, total measured duration, tail frames, reused/generated images, account usage, retries, and unresolved failures.
+
+If a returned video duration differs from the manifest by more than one frame, classify it as a model-output mismatch. Preserve the returned file under a diagnostic name and regenerate the shot; do not silently trim or stretch it into the canonical `<chapter>-<shot>.mp4` output. Include every mismatch and any manual exception in the completion report.
