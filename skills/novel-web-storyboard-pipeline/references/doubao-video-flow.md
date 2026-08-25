@@ -18,7 +18,7 @@ Upload one image at a time. Never batch multiple binary clipboard items into one
 
 Allow up to 60 seconds for each clipboard upload action. If a timed-out page cannot be reclaimed promptly, abandon that unsubmitted page, open a fresh Doubao page, restore the model/ratio/duration settings, and restart the shot from an empty composer. Do not keep calling a stale tab handle. Because the abandoned composer was never submitted, it does not consume a generation quota.
 
-Doubao may render two identical thumbnails from one clipboard paste. When the just-uploaded asset appears twice, remove only the later duplicate and verify that one copy remains in the intended order before uploading the next image.
+Doubao may render two identical thumbnails from one clipboard paste. When the just-uploaded asset appears twice, remove only the later duplicate and verify that one copy remains in the intended order before uploading the next image. Prefer the duplicate thumbnail's own delete button: locate the last `img[alt="clipboard.jpeg"]`, target its parent card's `button.delete-btn-*`, hover the card if the button is hidden, then click it. Do not use an unqualified coordinate delete; it can remove the wrong reference after the strip shifts.
 
 After upload or submission, inspect any visible confirmation dialog. When `doubao.auto_confirm_generation_dialogs` is enabled and the dialog only confirms using the uploaded materials or continuing the already-authorized video generation, click its confirm button automatically. Do not auto-confirm login, CAPTCHA, payment, purchase, permission-sharing, quota-upgrade, or materially changed generation settings.
 
