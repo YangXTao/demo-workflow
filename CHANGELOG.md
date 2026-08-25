@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Keep complete spoken dialogue in short Seedance shots by specifying controlled accelerated delivery (normally 1.10–1.35x) when ordinary pacing would overrun; return genuinely overlong lines for storyboard splitting instead of accepting a cutoff.
+- Add a multi-character staging gate: explicit depth and screen lanes, staggered actions, stable camera axis, and prohibitions against body, robe, weapon, mount, and landing-plane intersections.
+
 - Recover from stale browser-control tabs without confusing them with website logout.
 - Treat timed-out uploads as unknown outcomes and require visible attachment count/order verification before retrying.
 - Add a hard per-shot asset validator so missing files and `pending_generation` assets cannot reach Doubao.

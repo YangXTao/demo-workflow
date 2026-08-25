@@ -45,6 +45,12 @@ An existing identity master does not automatically satisfy a new clothing, injur
 
 Process independent shots after a blocked branch only when their required assets and previous-state assumptions remain valid.
 
+## Dialogue pacing and multi-character staging
+
+Before production, compare every spoken line with the group duration. Do not shorten, cut off, or replace approved dialogue merely to fit a 10-second-or-shorter shot. When ordinary delivery will overrun, the Seedance prompt must specify the locked voice, the complete line, and controlled accelerated delivery, normally 1.10–1.35x. Keep consonants and emotional intent intelligible; the generated clip may be retimed in editorial. If even controlled acceleration cannot make the line intelligible, split the dramatic beat into additional storyboard groups before submission rather than accepting an unfinished line.
+
+For a multi-character prompt, define stable screen placement before defining action: foreground/midground/background or left/center/right, each actor's movement lane, and the camera axis. Stagger entries, attacks, landings, and reactions in time and depth. Use inserts, cutaways, or shot/reverse-shot for handoffs, pets, weapons, and close-range exchanges. Prohibit body overlap, intersecting robes or weapons, shared landing positions, and actors passing through one another; do not rely on dense effects to hide a collision.
+
 ## Downloads
 
 Before clicking download, run `scripts/download_watch.py snapshot`. After the click, use `scripts/download_watch.py wait` and accept only a newly created completed file. Ignore `.crdownload`, zero-byte files, and old files. Validate it, then use `scripts/download_watch.py promote` to move it to the expected chapter shot path. Never select a file merely because it is newest before the download action.

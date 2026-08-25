@@ -20,6 +20,12 @@ Do not click the hidden `input[type=file]` directly: it may not open a chooser. 
 
 After `setFiles`, visually verify that the attachment strip has exactly the manifest's number of thumbnails and that its left-to-right order matches `@图片1` through `@图片N`. If that verification fails, remove only the unexpected attachment or restart the unsubmitted composer; never submit an ambiguous strip.
 
+## Dialogue fit and anti-intersection gate
+
+Before sending a spoken prompt, verify that each complete line can be delivered in the selected duration. When it cannot, retain the complete line and specify the character's locked voice plus a controlled accelerated rate of 1.10–1.35x, with intelligible diction and no trailing unfinished words. Do not reduce the duration to force a cutoff. If that rate remains insufficient, return the shot to storyboard splitting rather than submitting a line that will not finish.
+
+Before sending any prompt with two or more characters, add explicit staging in the prompt: screen-left/center/right or foreground/midground/background positions, movement directions, separate vertical or depth lanes, and a stable camera axis. Stagger motions so only one close-range action occupies a contact zone at a time. Prefer an insert or reaction cut for a handoff, pet interaction, weapon clash, or landing. Explicitly forbid body, robe, limb, weapon, mount, and ground-plane intersection; do not use blur, smoke, white flashes, or dense particles to conceal a collision.
+
 After upload or submission, inspect any visible confirmation dialog. When `doubao.auto_confirm_generation_dialogs` is enabled and the dialog only confirms using the uploaded materials or continuing the already-authorized video generation, click its confirm button automatically. Do not auto-confirm login, CAPTCHA, payment, purchase, permission-sharing, quota-upgrade, or materially changed generation settings.
 
 ## Submission and wait
