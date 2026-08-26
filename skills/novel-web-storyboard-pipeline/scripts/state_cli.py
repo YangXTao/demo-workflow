@@ -102,28 +102,41 @@ def initialize(db: Path, manifest_path: Path) -> dict[str, Any]:
     return {"ok": True, "db": str(db), "chapter": chapter}
 
 
-def set_asset(db: Path, asset_id: str, status: str, path: str | None, error: str | None) -> None:
+def resolve_key(connection: sqlite3.Connection, table: str, key_column: str, short_id: str, chapter: int | None) -> str:
+    if chapter is not None:
+        key = f"{chapter}:{short_id}"
+        rows = connection.execute(f"SELECT {key_column} FROM {table} WHERE {key_column}=?", (key,)).fetchall()
+    elif ":" in short_id:
+        rows = connection.execute(f"SELECT {key_column} FROM {table} WHERE {key_column}=?", (short_id,)).fetchall()
+    else:
+        rows = connection.execute(
+            f"SELECT {key_column} FROM {table} WHERE {key_column}=? OR {key_column} LIKE ?",
+            (short_id, f"%:{short_id}"),
+        ).fetchall()
+    if len(rows) != 1:
+        scope = f" in chapter {chapter}" if chapter is not None else ""
+        raise KeyError(f"{table} must resolve exactly once{scope}: {short_id}")
+    return rows[0][key_column]
+
+
+def set_asset(db: Path, asset_id: str, status: str, path: str | None, error: str | None, chapter: int | None) -> None:
     with closing(connect(db)) as connection:
-        rows = connection.execute("SELECT asset_id FROM assets WHERE asset_id=? OR asset_id LIKE ?", (asset_id, f"%:{asset_id}")).fetchall()
-        if len(rows) != 1:
-            raise KeyError(f"Asset must resolve exactly once: {asset_id}")
+        key = resolve_key(connection, "assets", "asset_id", asset_id, chapter)
         cursor = connection.execute(
             "UPDATE assets SET status=?, output_path=COALESCE(?, output_path), error=?, updated_at=? WHERE asset_id=?",
-            (status, path, error, now(), rows[0]["asset_id"]),
+            (status, path, error, now(), key),
         )
         if cursor.rowcount != 1:
             raise KeyError(f"Unknown asset: {asset_id}")
         connection.commit()
 
 
-def set_shot(db: Path, shot_id: str, status: str, account: str | None, artifact: str | None, error: str | None) -> None:
+def set_shot(db: Path, shot_id: str, status: str, account: str | None, artifact: str | None, error: str | None, chapter: int | None) -> None:
     with closing(connect(db)) as connection:
-        rows = connection.execute("SELECT shot_id FROM shots WHERE shot_id=? OR shot_id LIKE ?", (shot_id, f"%:{shot_id}")).fetchall()
-        if len(rows) != 1:
-            raise KeyError(f"Shot must resolve exactly once: {shot_id}")
+        key = resolve_key(connection, "shots", "shot_id", shot_id, chapter)
         connection.execute(
             "UPDATE shots SET status=?, account=COALESCE(?, account), artifact_path=COALESCE(?, artifact_path), error=?, updated_at=? WHERE shot_id=?",
-            (status, account, artifact, error, now(), rows[0]["shot_id"]),
+            (status, account, artifact, error, now(), key),
         )
         connection.commit()
 
@@ -174,6 +187,7 @@ def main() -> int:
     asset.add_argument("--status", required=True)
     asset.add_argument("--path")
     asset.add_argument("--error")
+    asset.add_argument("--chapter", type=int, help="Required when the short asset ID exists in more than one chapter.")
 
     shot = sub.add_parser("set-shot")
     shot.add_argument("--db", required=True, type=Path)
@@ -182,6 +196,7 @@ def main() -> int:
     shot.add_argument("--account")
     shot.add_argument("--artifact")
     shot.add_argument("--error")
+    shot.add_argument("--chapter", type=int, help="Required when the short shot ID exists in more than one chapter.")
 
     account = sub.add_parser("record-account")
     account.add_argument("--db", required=True, type=Path)
@@ -204,10 +219,10 @@ def main() -> int:
     if args.command == "init":
         result = initialize(args.db.resolve(), args.manifest.resolve())
     elif args.command == "set-asset":
-        set_asset(args.db.resolve(), args.asset, args.status, args.path, args.error)
+        set_asset(args.db.resolve(), args.asset, args.status, args.path, args.error, args.chapter)
         result = {"ok": True}
     elif args.command == "set-shot":
-        set_shot(args.db.resolve(), args.shot, args.status, args.account, args.artifact, args.error)
+        set_shot(args.db.resolve(), args.shot, args.status, args.account, args.artifact, args.error, args.chapter)
         result = {"ok": True}
     elif args.command == "record-account":
         record_account(args.db.resolve(), args.account, args.delta, args.exhausted, args.reserved)

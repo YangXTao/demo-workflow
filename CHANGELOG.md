@@ -1,6 +1,10 @@
 # Changelog
 
-## Unreleased
+## v0.3.4 - 2026-08-26
+
+- Fix cross-chapter SQLite state resolution: `state_cli.py` now accepts `--chapter` for asset and shot updates, so repeated short IDs resolve deterministically to the active chapter.
+
+## v0.3.3 - 2026-08-26
 
 - Resolve contradictory upload-recovery instructions: the verified single-image copy-and-paste path now supersedes the file chooser only after that chooser is proven unavailable.
 - Add bounded browser-page recovery: preserve user1 tabs, use one fresh window at most, and record the page-control state instead of suggesting extension reinstallation or risking duplicate generation.
@@ -12,8 +16,6 @@
 
 - Add a bundled Node/Playwright local-video fallback for inspection and tail-frame extraction when OpenCV or FFmpeg are unavailable.
 - Add a safe, ordered Windows copy-and-paste material-upload recovery path after the verified Chrome file-chooser flow fails.
-
-## Unreleased
 
 ## v0.3.0 - 2026-08-25
 

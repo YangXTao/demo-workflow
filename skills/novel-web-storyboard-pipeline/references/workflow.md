@@ -8,6 +8,10 @@ One run accepts one or two explicit chapter directories. It never scans every ch
 
 `package_pending` -> `package_valid` -> `assets_resolving` -> `images_generating` -> `images_ready` -> `video_ready` -> `video_submitted` -> `video_downloaded` -> `video_valid` -> `complete`
 
+## SQLite state keys
+
+State rows are internally keyed as `<chapter>:<asset-or-shot-id>`. Whenever an ID is recorded after the initial manifest import, pass `--chapter <number>` to `state_cli.py set-asset` or `set-shot`. This is mandatory for ordinary short IDs because names such as `LOOK-002-P01` recur across chapters; never let a cross-chapter ambiguity block a completed asset or update the wrong row.
+
 Failures use `retryable`, `blocked`, or `failed`. Store the last visible evidence and error reason. A restart must verify the filesystem before trusting a stored success state.
 
 ## Chapter package
