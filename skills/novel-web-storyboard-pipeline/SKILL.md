@@ -30,6 +30,12 @@ This skill coordinates `novel-chapter-3d-pipeline`; it does not duplicate that s
 6. Run `scripts/preflight.py` for the requested one or two chapter directories. Do not submit work while a hard preflight error remains.
 7. Initialize or refresh the asset index with `scripts/build_asset_index.py`.
 
+### Chapter-preparation hard gate
+
+Before any image or video submission, confirm that the chapter package explicitly records every on-screen character's cultivation realm/state in `02-screenplay.md` and `03-assets.md`. The realm label must also appear in the relevant video prompt when it changes action scale, combat capability, pressure, aura, or the audience's reaction. Use only the source text or established project canon; if unknown, write `未明示` rather than inventing a realm.
+
+For every combat, spiritual-beast, spell, giant-form, or finishing-action group, read `seedance-cinematic-prompt-craft.md` and require the full long-prompt gate: a single dramatic task; continuous timed action; explicit character positions, facing, independent movement lanes and camera axis; a readable action chain from wind-up through contact and consequence; three or more purposeful VFX layers (five for a major technique); motivated primary light, exposure protection, environmental deformation and a precise end state. Record shot-specific prohibitions for likely failures such as back attacks, locked front-facing poses, cramped multi-person framing, body/weapon intersection, white-flash masking, weak glow-only effects, or slow unmotivated motion. Do not wait for the user to repeat these requirements.
+
 ## Production phases
 
 ### 1. Build and validate chapter packages
@@ -37,6 +43,8 @@ This skill coordinates `novel-chapter-3d-pipeline`; it does not duplicate that s
 For each requested chapter, call `novel-chapter-3d-pipeline` on its readable chapter text. Store its seven-file package in the chapter's configured asset directory. Run that skill's validator and continue only after it passes.
 
 If a complete valid package already exists, reuse it unless the user asks to regenerate it.
+
+The screenplay must place a compact `角色境界与战力状态` table before the scene list. Each row includes character, realm/state, source basis, combat implication, and allowed visual expression. Keep it synchronized with `03-assets.md`, `05-storyboard-video-prompts.md`, and `07-seedance-2-fast-prompts.md`.
 
 ### 2. Build the run manifest
 
@@ -87,11 +95,13 @@ Run `scripts/state_cli.py summary` at completion. A chapter is complete only whe
 
 - Never delete or replace an accepted user asset automatically.
 - Never treat a browser timeout as proof that generation failed; inspect visible state first.
+- Treat the distinct state “tab enumeration works, but a single atomic `tabs.get`, claim, title/read, click, or other page command times out” as `browser_control_unresponsive`, not as logout, a failed generation, a broken image upload, or a Chrome-extension installation problem. Apply the bounded recovery in `references/workflow.md`. Each recovery probe is exactly one browser operation; never combine claim, navigation, load waiting, page read, screenshot, or click in the same request, because a normal slow page load otherwise masquerades as a dead control channel. If an existing user-tab claim alone fails, preserve that tab and use one new agent-created tab in the same configured `用户1` Chrome window instead of retrying the claim. Preserve packages, manifests, pending jobs and downloads. If the atomic safe retry still fails, record the state and stop browser actions for that dependency; do not loop through claims, page reads, restarts, plugin reinstalls, or user-facing troubleshooting requests. Resume from the same manifest on the next explicit continuation.
 - Treat an upload timeout or browser-pipe disconnect as an unknown outcome. Reconnect, inspect the visible attachment count and order, and retry only when the prior upload is proven absent. Never repeat an uncertain paste directly.
 - Never submit the same shot twice while an earlier submission may still be running.
 - Stop the affected dependency chain after the configured retry limit, but continue independent shots when safe.
 - Stop before submitting when the page shows a login challenge, CAPTCHA, unavailable model, unexpected paid purchase, or changed upload limit that the manifest cannot satisfy.
 - Keep `fei-1` unused until all other accounts are unavailable or exhausted.
+- When the user expressly authorizes uninterrupted chapter production, continue sequentially through preparation, asset resolution, generation, download, validation and acceptance audit without pausing for routine confirmation. The only stop conditions remain CAPTCHA, login challenge, payment/purchase, unavailable model, changed page rule, or a genuinely unresolved hard validation error.
 
 ## Portability
 

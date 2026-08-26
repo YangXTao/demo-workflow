@@ -15,6 +15,10 @@
 - New identity: use a fresh conversation without another character's image.
 - Props and empty scenes do not require per-asset conversation isolation, but their prompts and downloads must remain unambiguous.
 
+## Upload recovery
+
+Use the supported visible file-chooser batch first. If it cannot be created after the enabled Chrome file-URL permission has already been verified, keep the same fresh conversation and use the controlled browser tab's attachment clipboard for the original accepted PNG. Focus the visible composer, paste exactly once through the DOM control surface, then inspect the visible attachment strip. A transport timeout or pipe close makes that one paste **unknown**, not absent: reconnect and inspect first. Never create a `副本`, do not repeat an uncertain paste, and never move the character task into another character's conversation.
+
 ## Visual acceptance gate
 
 Inspect the generated image before download or promotion:

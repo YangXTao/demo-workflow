@@ -26,6 +26,10 @@ SHOT_HEADING = re.compile(r"^(?P<id>SG-\d+)\s*\|\s*duration=(?P<duration>[0-9.]+
 REFERENCE_FILE = re.compile(r"`([^`]+\.(?:png|jpe?g|webp|bmp))`", re.I)
 SHOT_ID = re.compile(r"SG-\d+", re.I)
 BINDING = re.compile(r"(?m)^\s*-\s*@图片(?P<order>\d+)\s*[：:]\s*(?P<text>.+?)\s*$")
+ASSET_ROW = re.compile(
+    r"^\|(?P<id>(?:CHAR|LOOK|PROP|LOC)-\d{3})\|(?P<title>[^|]+)\|(?P<source>[^|]+)\|[^|]*\|(?P<shots>[^|]+)\|\s*$",
+    re.MULTILINE,
+)
 
 
 def metadata(section: str, label: str) -> str:
@@ -50,6 +54,7 @@ def parse_image_prompts(path: Path) -> list[dict[str, Any]]:
                 "quality": metadata(section, "Quality"),
                 "size": metadata(section, "Size"),
                 "purpose": metadata(section, "用途"),
+                "output_filename": metadata(section, "输出文件"),
                 "applicable_shots": applicable,
                 "reference_text": reference_text,
                 "reference_files": REFERENCE_FILE.findall(reference_text),
@@ -57,6 +62,55 @@ def parse_image_prompts(path: Path) -> list[dict[str, Any]]:
             }
         )
     return prompts
+
+
+def _expand_shot_scope(value: str) -> list[str]:
+    """Expand author-facing SG-001~003 ranges while retaining individual IDs."""
+    result: set[str] = set()
+    for start_text, end_text in re.findall(r"SG-(\d{3})\s*[~～-]\s*(\d{3})", value, re.I):
+        start, end = int(start_text), int(end_text)
+        if start <= end:
+            result.update(f"SG-{number:03d}" for number in range(start, end + 1))
+    result.update(value.upper() for value in SHOT_ID.findall(value))
+    return sorted(result)
+
+
+def parse_reusable_assets(path: Path, image_dir: Path, prompt_assets: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Expose explicit 03-assets.md reuse rows to the manifest binding resolver."""
+    prompt_base_ids = {str(item["asset_id"]).rsplit("-P", 1)[0] for item in prompt_assets}
+    reusable: list[dict[str, Any]] = []
+    for match in ASSET_ROW.finditer(read_text(path)):
+        asset_id = match.group("id")
+        if asset_id in prompt_base_ids:
+            continue
+        source_match = REFERENCE_FILE.search(match.group("source"))
+        if not source_match:
+            continue
+        filename = Path(source_match.group(1)).name
+        resolved = image_dir / filename
+        if not resolved.is_file():
+            continue
+        title = match.group("title").strip()
+        reusable.append(
+            {
+                "asset_id": asset_id,
+                "kind": asset_id.split("-", 1)[0],
+                "title": f"{title} {Path(filename).stem}",
+                "model": "",
+                "quality": "",
+                "size": "",
+                "purpose": "existing accepted reusable asset",
+                "applicable_shots": _expand_shot_scope(match.group("shots")),
+                "reference_text": match.group("source").strip(),
+                "reference_files": [filename],
+                "prompt": "",
+                "existing_path": str(resolved),
+                "output_path": str(resolved),
+                "status": "reused",
+                "fresh_chat_required": False,
+            }
+        )
+    return reusable
 
 
 def _transition(prompt: str) -> str:
@@ -119,7 +173,9 @@ def _best_existing(asset: dict[str, Any], index: dict[str, Any], aliases: dict[s
             contains.append(path)
     if exact:
         return sorted(exact)[0]
-    if contains:
+    # A new clothing/state LOOK needs an exact accepted match.  A character
+    # identity master with the same name must never satisfy that new visible state.
+    if contains and asset["kind"] != "LOOK":
         return sorted(contains, key=len)[0]
     # A CHAR task may directly reuse the named identity image. LOOK/PROP/LOC references
     # remain generation inputs unless a title-matching finished asset exists.
@@ -133,6 +189,9 @@ def _best_existing(asset: dict[str, Any], index: dict[str, Any], aliases: dict[s
 
 
 def _output_name(asset: dict[str, Any], chapter_number: int) -> str:
+    explicit = str(asset.get("output_filename") or "").strip()
+    if explicit:
+        return sanitize_filename(explicit)
     title = sanitize_filename(asset["title"].replace("·", "-"))
     if asset["kind"] == "CHAR":
         return f"{title}-三视图.png"
@@ -185,15 +244,18 @@ def build_manifest(config_path: Path, chapter_dir: Path, asset_index_path: Path 
     index = load_json(index_path) if index_path.exists() else {"assets": []}
     aliases = config.get("aliases", {})
 
-    assets = parse_image_prompts(asset_dir / "04-gpt-image-2-prompts.md")
+    prompt_assets = parse_image_prompts(asset_dir / "04-gpt-image-2-prompts.md")
+    assets = list(prompt_assets)
     if not assets:
         raise ValueError("No image prompt sections were found")
-    for asset in assets:
+    for asset in prompt_assets:
         existing = _best_existing(asset, index, aliases)
         asset["existing_path"] = existing
         asset["output_path"] = existing or str(image_dir / _output_name(asset, chapter_number))
         asset["status"] = "reused" if existing else "pending_generation"
         asset["fresh_chat_required"] = asset["kind"] in {"CHAR", "LOOK"}
+
+    assets.extend(parse_reusable_assets(asset_dir / "03-assets.md", image_dir, prompt_assets))
 
     shots = parse_shots(asset_dir / "07-seedance-2-fast-prompts.md")
     if not shots:
@@ -220,11 +282,9 @@ def build_manifest(config_path: Path, chapter_dir: Path, asset_index_path: Path 
             matched = _match_binding(binding["description"], unused, aliases)
             if matched is None:
                 matched = _match_binding(binding["description"], shot_assets, aliases)
-            # Prompt authors occasionally omit a scene or prop from an
-            # asset's ``applicable_shots`` list while explicitly requesting
-            # it in a storyboard binding.  A conservative description match
-            # against the complete package is safer than emitting a null
-            # binding that only fails later during video upload validation.
+            # A storyboard can explicitly request an existing asset that was
+            # omitted from its authored applicable-shot list. Resolve that
+            # conservative text match before emitting a broken null binding.
             if matched is None:
                 all_unused = [asset for asset in assets if asset["asset_id"] not in used_asset_ids]
                 matched = _match_binding(binding["description"], all_unused, aliases)

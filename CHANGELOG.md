@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Resolve contradictory upload-recovery instructions: the verified single-image copy-and-paste path now supersedes the file chooser only after that chooser is proven unavailable.
+- Add bounded browser-page recovery: preserve user1 tabs, use one fresh window at most, and record the page-control state instead of suggesting extension reinstallation or risking duplicate generation.
+- Add ChatGPT attachment-clipboard recovery without creating image copies, plus Chapter 31 manifest support for explicit output names, new visible character looks, and packaged reusable assets.
+- Require cultivation-state continuity, timed dialogue delivery at up to 1.50x when needed, multi-character anti-intersection staging, and full long-prompt combat gates.
+
 ## v0.3.1 - 2026-08-25
 
 - Add a bundled Node/Playwright local-video fallback for inspection and tail-frame extraction when OpenCV or FFmpeg are unavailable.
