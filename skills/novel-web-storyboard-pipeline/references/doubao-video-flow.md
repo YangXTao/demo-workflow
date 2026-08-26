@@ -9,10 +9,11 @@ For the current shot, verify:
 - Duration matches the manifest.
 - Every required image exists and the count does not exceed the configured safe maximum.
 - Upload order exactly matches `@图片1` through `@图片N`.
+- Each binding's visual identity matches its description and referenced prompt role, not merely its filename or existence check. A character binding for 咪咪, for example, must resolve to the accepted 咪咪 asset rather than another existing creature asset.
 - The prompt pasted is the complete code block for the same `SG`.
 - No earlier job for the same shot is still pending.
 
-Run `scripts/validate_shot_assets.py --manifest <manifest> --shot <SG-ID>` immediately before upload. Do not submit if any binding path is absent, any binding is unresolved, or its manifest asset still has `pending_generation` status. A predicted output filename is not an existing asset.
+Run `scripts/validate_shot_assets.py --manifest <manifest> --shot <SG-ID>` immediately before upload, then manually cross-check every binding's description, asset identity, and path against the prompt. Do not submit if any binding path is absent, any binding is unresolved, its role and asset identity disagree, or its manifest asset still has `pending_generation` status. A predicted output filename is not an existing asset.
 
 Use the visible `+` material button and the browser file-chooser flow first. Start `waitForEvent("filechooser")`, then click that visible button, check `chooser.isMultiple()`, and call `chooser.setFiles()` once with all binding paths in their manifest order. This avoids duplicate thumbnails and is the verified multi-image path.
 
