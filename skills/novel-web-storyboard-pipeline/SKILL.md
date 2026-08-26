@@ -81,7 +81,7 @@ For `尾帧直续`, extract the preceding accepted video's last frame and upload
 
 Wait for the current job to finish. In Doubao's watermark-free resource panel, the newest generated result is always renumbered as `视频1`; download only the top `视频1` row for the just-completed shot, regardless of how many older resources are listed. Wait until the partial download disappears, then move and rename it to `<chapter-number>-<shot-number>.mp4`. Validate its duration and readability before starting the next shot.
 
-Rotate Doubao accounts only when the current account reaches its actual page-reported limit. Track submissions and results locally. Reserve account `fei-1` until every other available account is exhausted.
+Rotate Doubao accounts only when the current account reaches its actual page-reported limit. Track submissions and results locally. Reserve accounts `fei-1` and `yindu-1` until every other available account is exhausted; use them last in that order unless the user changes it.
 
 ### 5. Resume and finish
 
@@ -100,7 +100,7 @@ Run `scripts/state_cli.py summary` at completion. A chapter is complete only whe
 - Never submit the same shot twice while an earlier submission may still be running.
 - Stop the affected dependency chain after the configured retry limit, but continue independent shots when safe.
 - Stop before submitting when the page shows a login challenge, CAPTCHA, unavailable model, unexpected paid purchase, or changed upload limit that the manifest cannot satisfy.
-- Keep `fei-1` unused until all other accounts are unavailable or exhausted.
+- Keep `fei-1` and `yindu-1` unused until all other accounts are unavailable or exhausted.
 - When the user expressly authorizes uninterrupted chapter production, continue sequentially through preparation, asset resolution, generation, download, validation and acceptance audit without pausing for routine confirmation. The only stop conditions remain CAPTCHA, login challenge, payment/purchase, unavailable model, changed page rule, or a genuinely unresolved hard validation error.
 
 ## Portability

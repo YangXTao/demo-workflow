@@ -30,7 +30,9 @@ Before sending any prompt with two or more characters, add explicit staging in t
 
 After upload or submission, inspect any visible confirmation dialog. When `doubao.auto_confirm_generation_dialogs` is enabled and the dialog only confirms using the uploaded materials or continuing the already-authorized video generation, click its confirm button automatically. Do not auto-confirm login, CAPTCHA, payment, purchase, permission-sharing, quota-upgrade, or materially changed generation settings.
 
-After an ordinary material-safety confirmation, verify a **new visible Seedance job-state message or resource-panel transition** before recording the shot as submitted or incrementing the account-use counter. If the confirmation closes but the composer merely becomes an ordinary chat message and, after one bounded wait, there is still no job state and no new resource, classify the attempt as `video_submit_unknown_no_job`: preserve the evidence, do not count quota, and retry once only on one clean Doubao page with the same manifest bindings. If that clean retry has the same result, stop retries for that account/shot and record a page-level submission failure; never loop by repeatedly sending the same prompt.
+After an ordinary material-safety confirmation, verify a **new visible Seedance job-state message or resource-panel transition** before recording the shot as submitted or incrementing the account-use counter. If the confirmation closes but the composer merely becomes an ordinary chat message and, after one bounded wait, there is still no job state and no new resource, classify the attempt as `video_submit_unknown_no_job` and preserve the evidence without counting quota.
+
+For the reserved last-use accounts `fei-1` and `yindu-1`, the user authorizes a bounded recovery policy for that exact no-job state: re-submit the same fully verified shot in the current conversation up to **10 total submissions**; if none creates a visible job, use a clean new conversation and repeat. Create at most **10 conversations** for that account/shot. Between every attempt inspect the visible job state and resource panel; never send again while a job may exist. After the 10-by-10 budget is exhausted, mark the shot failed for that account and stop that account's chain. This policy does not authorize retries for login, CAPTCHA, payment, quota upgrade, model removal, or changed page rules.
 
 ## Submission and wait
 
@@ -60,4 +62,4 @@ If the failure is confined to a short interval and the frames immediately before
 
 ## Account rotation
 
-Read the account label from the visible account menu. Maintain local usage, but prefer the page's actual limit signal. After the current account is exhausted, select another available account. Exclude `fei-1` until all other accounts are unavailable or exhausted. Never store passwords or authentication tokens.
+Read the account label from the visible account menu. Maintain local usage, but prefer the page's actual limit signal. After the current account is exhausted, select another available account. Exclude `fei-1` and `yindu-1` until all other accounts are unavailable or exhausted, then use `fei-1` before `yindu-1`. Never store passwords or authentication tokens.
