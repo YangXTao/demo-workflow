@@ -222,7 +222,9 @@ def _match_binding(description: str, eligible: list[dict[str, Any]], aliases: di
         # "三视图" and "场景图". A direct mention of the authored asset
         # identity must win over that generic overlap, otherwise a later
         # monster/prop can be bound as a pet or a different character.
-        primary_title = re.split(r"[，,、（(]", asset["title"], maxsplit=1)[0].strip()
+        # Reusable rows append the accepted filename after a space.  Keep
+        # only the authored identity before that suffix as well.
+        primary_title = re.split(r"[\s，,、（(]", asset["title"], maxsplit=1)[0].strip()
         primary_key = normalize_name(primary_title, aliases)
         if len(primary_key) >= 2 and primary_key in normalized_description:
             score += 2.0

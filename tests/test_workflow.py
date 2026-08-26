@@ -14,7 +14,7 @@ REPO = Path(__file__).resolve().parents[1]
 SCRIPTS = REPO / "skills" / "novel-web-storyboard-pipeline" / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
-from build_run_manifest import _best_existing, _eligible_assets_for_shot, build_manifest  # noqa: E402
+from build_run_manifest import _best_existing, _eligible_assets_for_shot, _match_binding, build_manifest  # noqa: E402
 from download_watch import promote, snapshot  # noqa: E402
 from image_tools import normalize_png  # noqa: E402
 from media_tools import extract_tail, inspect_video  # noqa: E402
@@ -41,7 +41,7 @@ class WorkflowTests(unittest.TestCase):
                 {"filename": "万宗大会环形广场-投影高台与城北远景-第28章-场景图.png", "path": "C:/assets/scene.png"},
             ]
         }
-        look = {"title": "沈青梧·万宗大会蓝金举证造型", "kind": "LOOK", "reference_files": []}
+        look = {"title": "沈青梧", "kind": "CHAR", "reference_files": []}
         scene = {"title": "万宗大会环形广场、投影高台与城北远景", "kind": "LOC", "reference_files": []}
         self.assertEqual(_best_existing(look, index, {}), "C:/assets/沈青梧-三视图.png")
         self.assertEqual(_best_existing(scene, index, {}), "C:/assets/scene.png")
@@ -54,6 +54,15 @@ class WorkflowTests(unittest.TestCase):
         ]
         eligible = _eligible_assets_for_shot(assets, "SG-015")
         self.assertEqual([item["asset_id"] for item in eligible], ["PROP-001-P01", "LOC-001-P01"])
+
+    def test_binding_prefers_explicit_identity_over_generic_reference_sheet_words(self) -> None:
+        assets = [
+            {"asset_id": "CHAR-003", "title": "青鸾 青鸾-三视图", "purpose": "existing accepted reusable asset"},
+            {"asset_id": "CHAR-004-P01", "title": "守衣银蛟", "purpose": "东方无翼蛟龙三视图"},
+        ]
+        result = _match_binding("青鸾三视图，只锁定翠绿青蓝羽、银白喙与赤金羽纹。", assets, {})
+        self.assertIsNotNone(result)
+        self.assertEqual(result["asset_id"], "CHAR-003")
 
     def _fixture(self, root: Path) -> tuple[Path, Path, Path]:
         project = root / "小说"
@@ -88,6 +97,10 @@ character prompt
 location prompt
 ```
 """,
+            encoding="utf-8",
+        )
+        (asset_dir / "03-assets.md").write_text(
+            """# 资产\n\n|ID|资产/境界状态|来源与文件|连续性锁|适用|\n|---|---|---|---|---|\n""",
             encoding="utf-8",
         )
         (asset_dir / "07-seedance-2-fast-prompts.md").write_text(
@@ -142,7 +155,7 @@ location prompt
             manifest = build_manifest(config, chapter, index)
             self.assertEqual(manifest["chapter"]["number"], 28)
             self.assertEqual(len(manifest["shots"]), 2)
-            self.assertEqual(manifest["assets"][0]["status"], "reused")
+            self.assertEqual(manifest["assets"][0]["status"], "generated")
             self.assertTrue(manifest["shots"][0]["tail_frame_required"])
             self.assertEqual(manifest["shots"][1]["bindings"][0]["source"], "previous_tail_frame")
             self.assertTrue(manifest["shots"][1]["bindings"][0]["path"].endswith("28-1-尾帧.png"))
@@ -156,7 +169,7 @@ location prompt
             manifest_path.write_text(json.dumps(manifest, ensure_ascii=False), encoding="utf-8")
             db = root / "state.sqlite"
             initialize(db, manifest_path)
-            set_shot(db, "SG-001", "downloaded", "account-a", str(root / "28-1.mp4"), None)
+            set_shot(db, "SG-001", "downloaded", "account-a", str(root / "28-1.mp4"), None, 28)
             record_account(db, "account-a", 1, False, False)
             report = summary(db)
             self.assertIn({"status": "downloaded", "count": 1}, report["shots"])

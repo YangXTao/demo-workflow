@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.13 - 2026-08-27
+
+- Correct explicit identity extraction for reusable assets whose display title appends a filename. Character bindings such as 青鸾 now reliably outrank generic `三视图` token matches; add regression coverage for this case and for the current manifest/state API contract.
+
 ## v0.3.12 - 2026-08-27
 
 - Make manifest asset binding prefer an explicit Chinese identity mention over generic overlap such as `三视图` or `场景图`. This prevents a role such as 咪咪 from being silently bound to a different character reference sheet.
