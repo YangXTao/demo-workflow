@@ -6,6 +6,7 @@
 - Add bounded browser-page recovery: preserve user1 tabs, use one fresh window at most, and record the page-control state instead of suggesting extension reinstallation or risking duplicate generation.
 - Add ChatGPT attachment-clipboard recovery without creating image copies, plus Chapter 31 manifest support for explicit output names, new visible character looks, and packaged reusable assets.
 - Require cultivation-state continuity, timed dialogue delivery at up to 1.50x when needed, multi-character anti-intersection staging, and full long-prompt combat gates.
+- Fix false browser failures caused by a self-imposed 10-second page-control budget; page operations now use at least 60 seconds and recovery Chrome windows retain one normal keepalive tab.
 
 ## v0.3.1 - 2026-08-25
 
