@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.5 - 2026-08-26
+
+- Make manifest rebuilds recognize an exact generated output filename before fuzzy asset reuse, so verified new character, look, and prop files remain video-eligible after regeneration.
+
 ## v0.3.4 - 2026-08-26
 
 - Fix cross-chapter SQLite state resolution: `state_cli.py` now accepts `--chapter` for asset and shot updates, so repeated short IDs resolve deterministically to the active chapter.

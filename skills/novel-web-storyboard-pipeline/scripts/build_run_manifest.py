@@ -249,10 +249,12 @@ def build_manifest(config_path: Path, chapter_dir: Path, asset_index_path: Path 
     if not assets:
         raise ValueError("No image prompt sections were found")
     for asset in prompt_assets:
-        existing = _best_existing(asset, index, aliases)
+        expected_output = image_dir / _output_name(asset, chapter_number)
+        generated_output = str(expected_output) if expected_output.is_file() else None
+        existing = generated_output or _best_existing(asset, index, aliases)
         asset["existing_path"] = existing
         asset["output_path"] = existing or str(image_dir / _output_name(asset, chapter_number))
-        asset["status"] = "reused" if existing else "pending_generation"
+        asset["status"] = "generated" if generated_output else "reused" if existing else "pending_generation"
         asset["fresh_chat_required"] = asset["kind"] in {"CHAR", "LOOK"}
 
     assets.extend(parse_reusable_assets(asset_dir / "03-assets.md", image_dir, prompt_assets))
