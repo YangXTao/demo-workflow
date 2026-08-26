@@ -26,6 +26,7 @@ Inspect the generated image before download or promotion:
 - Character sheet: one identity across all views, correct number of views, consistent clothing and body proportions, no text, labels, watermark, extra person, duplicate body, malformed hands, or unrelated face.
 - New identity: compare the large head view with unrelated accepted character masters. Reject a face that is materially the same or confusingly similar.
 - Existing identity/new look: require the same face as the uploaded master; reject identity drift.
+- Female Xianxia look: a clean forehead is not an instruction to leave the head silhouette bare. Unless the package explicitly requires simplicity, use a small, face-safe asymmetric hair comb, hairpin, or short tassel anchored in the hair; keep it off the forehead and eyes, lock its placement across all views, and reject a large crown or generic empty hairstyle.
 - Group: require visibly different faces, heights, silhouettes, and clothing; reject cloned crowds or twins unless requested.
 - Prop: correct 1:1 composition, no hands or people.
 - Scene: correct 16:9 composition and strictly empty when the prompt requires it.

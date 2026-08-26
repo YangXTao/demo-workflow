@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.3.6 - 2026-08-26
+
+- Fix Doubao multi-image upload recovery to bind the chooser to the visible `+` material button, verify multi-select, and submit the ordered batch once; exclude the hidden-input and virtual-clipboard paths that can lose the chooser or close the control pipe.
+- Add a female Xianxia look gate: clean forehead must retain a restrained, consistent hair accessory silhouette rather than becoming a generic bare hairstyle.
+
 ## v0.3.5 - 2026-08-26
 
 - Make manifest rebuilds recognize an exact generated output filename before fuzzy asset reuse, so verified new character, look, and prop files remain video-eligible after regeneration.
