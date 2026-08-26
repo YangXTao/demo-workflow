@@ -211,12 +211,21 @@ def _tokens(value: str, aliases: dict[str, str]) -> set[str]:
 
 def _match_binding(description: str, eligible: list[dict[str, Any]], aliases: dict[str, str]) -> dict[str, Any] | None:
     target = _tokens(description, aliases)
+    normalized_description = normalize_name(description, aliases)
     scored: list[tuple[float, dict[str, Any]]] = []
     for asset in eligible:
         source = _tokens(asset["title"] + asset.get("purpose", ""), aliases)
         if not target or not source:
             continue
         score = len(target & source) / max(1, min(len(target), len(source)))
+        # Chinese binding descriptions often share generic words such as
+        # "三视图" and "场景图". A direct mention of the authored asset
+        # identity must win over that generic overlap, otherwise a later
+        # monster/prop can be bound as a pet or a different character.
+        primary_title = re.split(r"[，,、（(]", asset["title"], maxsplit=1)[0].strip()
+        primary_key = normalize_name(primary_title, aliases)
+        if len(primary_key) >= 2 and primary_key in normalized_description:
+            score += 2.0
         scored.append((score, asset))
     if not scored:
         return None

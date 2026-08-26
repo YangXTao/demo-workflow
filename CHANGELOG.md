@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.12 - 2026-08-27
+
+- Make manifest asset binding prefer an explicit Chinese identity mention over generic overlap such as `三视图` or `场景图`. This prevents a role such as 咪咪 from being silently bound to a different character reference sheet.
+
 ## v0.3.6 - 2026-08-26
 
 - Fix Doubao multi-image upload recovery to bind the chooser to the visible `+` material button, verify multi-select, and submit the ordered batch once; exclude the hidden-input and virtual-clipboard paths that can lose the chooser or close the control pipe.
