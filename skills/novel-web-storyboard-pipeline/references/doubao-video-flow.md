@@ -30,6 +30,8 @@ Before sending any prompt with two or more characters, add explicit staging in t
 
 After upload or submission, inspect any visible confirmation dialog. When `doubao.auto_confirm_generation_dialogs` is enabled and the dialog only confirms using the uploaded materials or continuing the already-authorized video generation, click its confirm button automatically. Do not auto-confirm login, CAPTCHA, payment, purchase, permission-sharing, quota-upgrade, or materially changed generation settings.
 
+After an ordinary material-safety confirmation, verify a **new visible Seedance job-state message or resource-panel transition** before recording the shot as submitted or incrementing the account-use counter. If the confirmation closes but the composer merely becomes an ordinary chat message and, after one bounded wait, there is still no job state and no new resource, classify the attempt as `video_submit_unknown_no_job`: preserve the evidence, do not count quota, and retry once only on one clean Doubao page with the same manifest bindings. If that clean retry has the same result, stop retries for that account/shot and record a page-level submission failure; never loop by repeatedly sending the same prompt.
+
 ## Submission and wait
 
 Submit one shot at a time. Record account label, submission time, shot ID, and visible job state. Poll visible state without repeatedly clicking generate. A timeout is not proof of failure.
