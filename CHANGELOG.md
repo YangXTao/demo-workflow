@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.3.16 - 2026-08-27
+
+- Replace the ambiguous escort-position rule with a hard faction-partition gate: `allied zone | barrier/contact plane | hostile zone` must be defined before the timeline and preserved at every beat.
+- Require shield casters, protected subjects, and allies to remain on the same side of a barrier while using depth separation to avoid overlap; a barrier separating allies, allies facing one another as opponents, or hostile projectiles entering the protected zone is an automatic whole-shot failure.
+
 ## v0.3.15 - 2026-08-27
 
 - Merge the curated 7.4 and 8.0 production material into one active 7,474-line, 694,810-byte cinematic knowledge base, while moving superseded source files into a non-runtime archive so prompt routing cannot split between competing versions.
