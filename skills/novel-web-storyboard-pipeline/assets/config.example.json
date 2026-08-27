@@ -12,6 +12,7 @@
   "video_retry_limit": 3,
   "minimum_free_bytes": 5368709120,
   "reserved_last_account": "fei-1",
+  "reserved_tail_accounts": ["yindu-1", "yindu-2", "fei-1"],
   "account_generation_limit": 3,
   "browser": {
     "family": "chrome",

@@ -26,7 +26,7 @@ This skill coordinates `novel-chapter-3d-pipeline`; it does not duplicate that s
 1. Read [workflow.md](references/workflow.md).
 2. Read [chatgpt-image-flow.md](references/chatgpt-image-flow.md) before generating images.
 3. Read [doubao-video-flow.md](references/doubao-video-flow.md) before submitting videos.
-4. Read [seedance-cinematic-prompt-craft.md](references/seedance-cinematic-prompt-craft.md), [cinematic-v74-seedance-adaptation.md](references/cinematic-v74-seedance-adaptation.md), and [v74-effective-knowledge-catalog.md](references/v74-effective-knowledge-catalog.md) before generating, expanding, revising, submitting, or auditing combat, spell, giant-form, disaster, army, or other spectacle shots. The catalog routes each task to the relevant, detailed section of [v74-effective-knowledge-base.md](references/v74-effective-knowledge-base.md); read that section before writing or auditing the corresponding shot. These curated references are the only 7.4-derived rules that may be used in production. Do not import unfiltered historical prompts, fixed legacy parameters, or rules that conflict with current user, asset, safety, or Doubao-web-operation requirements.
+4. Read [seedance-cinematic-prompt-craft.md](references/seedance-cinematic-prompt-craft.md), [cinematic-seedance-production-knowledge.md](references/cinematic-seedance-production-knowledge.md), and [cinematic-production-knowledge-catalog.md](references/cinematic-production-knowledge-catalog.md) before generating, expanding, revising, submitting, or auditing combat, spell, giant-form, disaster, army, or other spectacle shots. `cinematic-seedance-production-knowledge.md` is the only active movie-language knowledge base: its first part contains authoritative unified rules and its later part contains detailed technique material subject to those rules. Never read `references/archive/` during production.
 5. Load the project configuration. If absent, copy `assets/config.example.json` to `<project>/.workflow/config.json`, set `project_root`, and preserve user overrides.
 6. Run `scripts/preflight.py` for the requested one or two chapter directories. Do not submit work while a hard preflight error remains.
 7. Initialize or refresh the asset index with `scripts/build_asset_index.py`.
@@ -82,7 +82,7 @@ For `尾帧直续`, extract the preceding accepted video's last frame and upload
 
 Wait for the current job to finish. In Doubao's watermark-free resource panel, the newest generated result is always renumbered as `视频1`; download only the top `视频1` row for the just-completed shot, regardless of how many older resources are listed. Wait until the partial download disappears, then move and rename it to `<chapter-number>-<shot-number>.mp4`. Validate its duration and readability before starting the next shot.
 
-Rotate Doubao accounts only when the current account reaches its actual page-reported limit. Track submissions and results locally. Reserve accounts `fei-1` and `yindu-1` until every other available account is exhausted; use them last in that order unless the user changes it.
+Rotate Doubao accounts only when the current account reaches its actual page-reported limit. Track submissions and results locally. Exhaust all ordinary accounts before the reserved tail queue. The current tail queue is `yindu-1` → `yindu-2` → `fei-1`; `fei-1` is always the absolute final account even when more accounts are added later.
 
 ### 5. Resume and finish
 
@@ -101,7 +101,7 @@ Run `scripts/state_cli.py summary` at completion. A chapter is complete only whe
 - Never submit the same shot twice while an earlier submission may still be running.
 - Stop the affected dependency chain after the configured retry limit, but continue independent shots when safe.
 - Stop before submitting when the page shows a login challenge, CAPTCHA, unavailable model, unexpected paid purchase, or changed upload limit that the manifest cannot satisfy.
-- Keep `fei-1` and `yindu-1` unused until all other accounts are unavailable or exhausted.
+- Keep `yindu-1`, `yindu-2`, and `fei-1` unused until all ordinary accounts are unavailable or exhausted; use `fei-1` last under all future account additions.
 - For an explicitly designated retry of an already-uploaded Doubao shot, edit the original submitted message and send it again so its verified attachments stay attached. Do not re-upload the same files for that retry. Count it as a real submission only after the official visible `视频生成已提交` acknowledgement confirms `Seedance 2.0 Fast`, the expected wait, and quota consumption.
 - When the user expressly authorizes uninterrupted chapter production, continue sequentially through preparation, asset resolution, generation, download, validation and acceptance audit without pausing for routine confirmation. The only stop conditions remain CAPTCHA, login challenge, payment/purchase, unavailable model, changed page rule, or a genuinely unresolved hard validation error.
 

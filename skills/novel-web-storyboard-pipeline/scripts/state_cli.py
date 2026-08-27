@@ -87,8 +87,9 @@ def initialize(db: Path, manifest_path: Path) -> dict[str, Any]:
                      artifact_path=COALESCE(shots.artifact_path, excluded.artifact_path), updated_at=excluded.updated_at""",
                 (key, chapter, shot["sequence"], shot["status"], shot["video_path"], stamp),
             )
-        reserved = manifest.get("settings", {}).get("reserved_last_account")
-        if reserved:
+        settings = manifest.get("settings", {})
+        reserved_accounts = settings.get("reserved_tail_accounts") or [settings.get("reserved_last_account")]
+        for reserved in [account for account in reserved_accounts if account]:
             connection.execute(
                 """INSERT INTO accounts(account, used, exhausted, reserved, updated_at) VALUES(?, 0, 0, 1, ?)
                    ON CONFLICT(account) DO UPDATE SET reserved=1, updated_at=excluded.updated_at""",

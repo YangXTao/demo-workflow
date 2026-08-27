@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.3.15 - 2026-08-27
+
+- Merge the curated 7.4 and 8.0 production material into one active 7,474-line, 694,810-byte cinematic knowledge base, while moving superseded source files into a non-runtime archive so prompt routing cannot split between competing versions.
+- Add unified actual-duration prompt construction, source-and-direction evidence, sword-rain orientation, peacock fire-wall shields, multi-character lane staging, tail-frame continuity, readable landing consequences, dialogue completion, and director/viewer/editor acceptance gates.
+- Preserve narratively relevant blood and gore when requested; only adapt it when a platform explicitly rejects the submitted content rather than silently weakening the scene.
+- Extend the reserved account tail queue to `yindu-1`, `yindu-2`, then `fei-1`, with `fei-1` remaining the absolute final account even when more accounts are added later.
+
 ## v0.3.14 - 2026-08-27
 
 - Integrate the user-supplied 7.4 visual-production knowledge into a 5,782-line filtered, task-routed reference base for Xianxia Seedance production.

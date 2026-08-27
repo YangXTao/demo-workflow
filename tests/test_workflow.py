@@ -138,6 +138,7 @@ location prompt
                     "download_dir": ".workflow/downloads",
                     "account_generation_limit": 3,
                     "reserved_last_account": "fei-1",
+                    "reserved_tail_accounts": ["yindu-1", "yindu-2", "fei-1"],
                     "doubao": {"model": "Seedance 2.0 Fast", "ratio": "16:9", "max_images_per_shot": 9},
                     "chatgpt": {"model": "gpt-image-2"},
                     "aliases": {},
@@ -160,6 +161,7 @@ location prompt
             self.assertTrue(manifest["shots"][0]["tail_frame_required"])
             self.assertEqual(manifest["shots"][1]["bindings"][0]["source"], "previous_tail_frame")
             self.assertTrue(manifest["shots"][1]["bindings"][0]["path"].endswith("28-1-尾帧.png"))
+            self.assertEqual(manifest["settings"]["reserved_tail_accounts"], ["yindu-1", "yindu-2", "fei-1"])
 
     def test_resumable_state(self) -> None:
         with tempfile.TemporaryDirectory() as value:
@@ -174,7 +176,10 @@ location prompt
             record_account(db, "account-a", 1, False, False)
             report = summary(db)
             self.assertIn({"status": "downloaded", "count": 1}, report["shots"])
-            self.assertEqual(report["accounts"][0]["used"], 1)
+            accounts = {item["account"]: item for item in report["accounts"]}
+            self.assertEqual(accounts["account-a"]["used"], 1)
+            for account in ("yindu-1", "yindu-2", "fei-1"):
+                self.assertEqual(accounts[account]["reserved"], 1)
 
     def test_video_gate_rejects_pending_and_missing_assets(self) -> None:
         with tempfile.TemporaryDirectory() as value:
@@ -250,17 +255,22 @@ location prompt
         result = subprocess.run([sys.executable, "-m", "py_compile", *scripts], capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
 
-    def test_v74_knowledge_base_is_packaged_and_routed(self) -> None:
+    def test_unified_cinematic_knowledge_base_is_packaged_and_routed(self) -> None:
         skill = (SKILL_ROOT / "SKILL.md").read_text(encoding="utf-8")
-        catalog = (SKILL_ROOT / "references" / "v74-effective-knowledge-catalog.md").read_text(encoding="utf-8")
-        base = SKILL_ROOT / "references" / "v74-effective-knowledge-base.md"
-        adaptation = SKILL_ROOT / "references" / "cinematic-v74-seedance-adaptation.md"
+        catalog = (SKILL_ROOT / "references" / "cinematic-production-knowledge-catalog.md").read_text(encoding="utf-8")
+        base = SKILL_ROOT / "references" / "cinematic-seedance-production-knowledge.md"
         self.assertTrue(base.is_file())
-        self.assertTrue(adaptation.is_file())
-        self.assertGreater(len(base.read_text(encoding="utf-8").splitlines()), 5000)
-        self.assertIn("v74-effective-knowledge-base.md", skill)
-        self.assertIn("v74-effective-knowledge-base.md", catalog)
-        self.assertIn("16:9", base.read_text(encoding="utf-8").split("## 保留内容", 1)[0])
+        base_text = base.read_text(encoding="utf-8")
+        self.assertGreater(len(base_text.splitlines()), 7000)
+        self.assertGreater(base.stat().st_size, 600000)
+        self.assertIn("cinematic-seedance-production-knowledge.md", skill)
+        self.assertIn("cinematic-seedance-production-knowledge.md", catalog)
+        self.assertIn("Never read `references/archive/` during production", skill)
+        self.assertFalse((SKILL_ROOT / "references" / "v74-effective-knowledge-base.md").exists())
+        self.assertFalse((SKILL_ROOT / "references" / "cinematic-v74-seedance-adaptation.md").exists())
+        self.assertIn("16:9", base_text.split("## 保留内容", 1)[0])
+        self.assertIn("fei-1", skill)
+        self.assertIn("yindu-2", skill)
 
 
 if __name__ == "__main__":

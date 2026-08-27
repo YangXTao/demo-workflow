@@ -328,6 +328,9 @@ def build_manifest(config_path: Path, chapter_dir: Path, asset_index_path: Path 
             "ratio": config.get("doubao", {}).get("ratio"),
             "account_generation_limit": config.get("account_generation_limit", 3),
             "reserved_last_account": config.get("reserved_last_account", "fei-1"),
+            "reserved_tail_accounts": config.get(
+                "reserved_tail_accounts", ["yindu-1", "yindu-2", config.get("reserved_last_account", "fei-1")]
+            ),
             "download_dir": str(resolve_path(project_root, config.get("download_dir", ".workflow/downloads"))),
         },
         "assets": assets,
