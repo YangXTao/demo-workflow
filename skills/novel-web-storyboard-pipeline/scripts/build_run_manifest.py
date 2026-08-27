@@ -219,9 +219,10 @@ def _match_binding(description: str, eligible: list[dict[str, Any]], aliases: di
             continue
         score = len(target & source) / max(1, min(len(target), len(source)))
         # Chinese binding descriptions often share generic words such as
-        # "三视图" and "场景图". A direct mention of the authored asset
-        # identity must win over that generic overlap, otherwise a later
-        # monster/prop can be bound as a pet or a different character.
+        # "三视图" and "场景图".  A direct mention of the authored asset
+        # identity (the first title component) must win over that generic
+        # overlap; otherwise a later monster/prop can be bound as a pet or
+        # a different character solely because both are reference sheets.
         # Reusable rows append the accepted filename after a space.  Keep
         # only the authored identity before that suffix as well.
         primary_title = re.split(r"[\s，,、（(]", asset["title"], maxsplit=1)[0].strip()

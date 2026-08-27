@@ -12,6 +12,7 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
 SCRIPTS = REPO / "skills" / "novel-web-storyboard-pipeline" / "scripts"
+SKILL_ROOT = REPO / "skills" / "novel-web-storyboard-pipeline"
 sys.path.insert(0, str(SCRIPTS))
 
 from build_run_manifest import _best_existing, _eligible_assets_for_shot, _match_binding, build_manifest  # noqa: E402
@@ -248,6 +249,18 @@ location prompt
         scripts = [str(path) for path in SCRIPTS.glob("*.py")]
         result = subprocess.run([sys.executable, "-m", "py_compile", *scripts], capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_v74_knowledge_base_is_packaged_and_routed(self) -> None:
+        skill = (SKILL_ROOT / "SKILL.md").read_text(encoding="utf-8")
+        catalog = (SKILL_ROOT / "references" / "v74-effective-knowledge-catalog.md").read_text(encoding="utf-8")
+        base = SKILL_ROOT / "references" / "v74-effective-knowledge-base.md"
+        adaptation = SKILL_ROOT / "references" / "cinematic-v74-seedance-adaptation.md"
+        self.assertTrue(base.is_file())
+        self.assertTrue(adaptation.is_file())
+        self.assertGreater(len(base.read_text(encoding="utf-8").splitlines()), 5000)
+        self.assertIn("v74-effective-knowledge-base.md", skill)
+        self.assertIn("v74-effective-knowledge-base.md", catalog)
+        self.assertIn("16:9", base.read_text(encoding="utf-8").split("## 保留内容", 1)[0])
 
 
 if __name__ == "__main__":

@@ -29,21 +29,13 @@ def validate_shot_assets(manifest: dict[str, Any], shot_id: str) -> dict[str, An
         path = Path(str(path_value)) if path_value else None
         source = str(binding.get("source") or "")
         asset_id = binding.get("asset_id")
-        entry = {
-            "order": order,
-            "source": source,
-            "asset_id": asset_id,
-            "path": str(path) if path else None,
-            "exists": bool(path and path.is_file()),
-        }
-
+        entry = {"order": order, "source": source, "asset_id": asset_id, "path": str(path) if path else None, "exists": bool(path and path.is_file())}
         if source not in {"asset", "previous_tail_frame"}:
             errors.append(f"@图片{order} has unresolved source: {source or '<empty>'}")
         if not path:
             errors.append(f"@图片{order} has no resolved path")
         elif not path.is_file():
             errors.append(f"@图片{order} file does not exist: {path}")
-
         if source == "asset":
             asset = assets.get(str(asset_id)) if asset_id else None
             if asset is None:
@@ -54,7 +46,6 @@ def validate_shot_assets(manifest: dict[str, Any], shot_id: str) -> dict[str, An
                 if status == "pending_generation":
                     errors.append(f"@图片{order} asset {asset_id} is still pending_generation")
         checked.append(entry)
-
     return {"ok": not errors, "shot_id": normalized, "bindings": checked, "errors": errors}
 
 

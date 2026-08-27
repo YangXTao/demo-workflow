@@ -4,6 +4,8 @@ This repository contains the portable Codex skill `novel-web-storyboard-pipeline
 
 It coordinates `novel-chapter-3d-pipeline`, the signed-in ChatGPT website, and the signed-in Doubao website to process one or two Chinese novel chapters with reusable image assets, resumable Seedance 2.0 Fast shot generation, tail-frame continuity, account rotation, and local verification.
 
+For Xianxia combat and spectacle shots, the skill includes a filtered and task-routed 7.4 visual knowledge base. It retains detailed staging, action, VFX, weapon, array, camera, continuity, dialogue, and acceptance-audit rules while keeping current project requirements, 16:9, actual shot duration, and Doubao web-operation rules authoritative.
+
 Install the folder `skills/novel-web-storyboard-pipeline` into your Codex skills directory. The separate `novel-chapter-3d-pipeline` skill and browser control remain required. Browser credentials are never included.
 
 On Windows PowerShell:

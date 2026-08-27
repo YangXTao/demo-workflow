@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.3.14 - 2026-08-27
+
+- Integrate the user-supplied 7.4 visual-production knowledge into a 5,782-line filtered, task-routed reference base for Xianxia Seedance production.
+- Add an explicit execution route from the skill entrypoint through the 7.4 catalog to detailed rules for combat staging, weapon and sword-rain direction, spells, arrays, layered VFX, camera language, dialogue, tail-frame continuity, and director/viewer/editor acceptance audits.
+- Exclude the source's identity/marketing wrapper, unsuitable realistic-gore module, obsolete input directives, and 7:3 framing rule; current user requirements, 16:9, actual durations, project assets, and Doubao web-operation rules take precedence over any remaining historical example.
+
 ## v0.3.13 - 2026-08-27
 
 - Correct explicit identity extraction for reusable assets whose display title appends a filename. Character bindings such as 青鸾 now reliably outrank generic `三视图` token matches; add regression coverage for this case and for the current manifest/state API contract.
