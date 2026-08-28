@@ -41,6 +41,8 @@ If Doubao reports `生成内容中疑似包含侵权 / 违规内容` and explici
 
 Submit one shot at a time. Record account label, submission time, shot ID, and visible job state. Poll visible state without repeatedly clicking generate. A timeout is not proof of failure.
 
+After the official submission acknowledgement, if 7–8 minutes pass with no visible video and no explicit failure, reload the **same current Doubao tab once**. Wait for that conversation to restore, then inspect the existing submission, the visible job state, and the watermark-free resource panel. Treat the reload only as a delayed-result visibility refresh: do not click `重新生成`, edit the message, upload materials, resubmit, switch accounts, or increment the account-use counter. If the result appears after reload, download that existing result normally. If it remains absent, continue bounded inspection of the same job and only then apply `doubao.pending_stale_minutes`; the 7–8 minute refresh does not shorten the stale threshold and is not evidence of failure.
+
 If a job remains visibly submitted for longer than `doubao.pending_stale_minutes` with no downloadable result and no failure message, preserve the old job and classify it as server-stale. Resubmit the shot once on a different non-reserved account, after repeating the full upload gate. Accept the first valid result that arrives and ignore any later duplicate. Never delete the old conversation and never resubmit more than once solely because it is slow.
 
 ## Download

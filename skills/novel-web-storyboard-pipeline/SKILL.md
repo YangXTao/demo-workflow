@@ -94,6 +94,8 @@ For `尾帧直续`, extract the preceding accepted video's last frame and upload
 
 Wait for the current job to finish. In Doubao's watermark-free resource panel, the newest generated result is always renumbered as `视频1`; download only the top `视频1` row for the just-completed shot, regardless of how many older resources are listed. Wait until the partial download disappears, then move and rename it to `<chapter-number>-<shot-number>.mp4`. Validate its duration and readability before starting the next shot.
 
+After the official `视频生成已提交` acknowledgement, if no result is visible after 7–8 minutes and the page shows no explicit failure, reload that same Doubao tab once and inspect the same conversation and existing job again. This reload is a visibility refresh, never a retry: do not edit, upload, regenerate, resubmit, switch accounts, or increment usage because of it. Only apply the configured server-stale policy if the result is still absent after the refreshed page has restored and the existing job has been checked.
+
 Rotate Doubao accounts only when the current account reaches its actual page-reported limit. Track submissions and results locally. Exhaust all ordinary accounts before the reserved tail queue. The current tail queue is `yindu-1` → `yindu-2` → `fei-1`; `fei-1` is always the absolute final account even when more accounts are added later.
 
 ### 5. Resume and finish
