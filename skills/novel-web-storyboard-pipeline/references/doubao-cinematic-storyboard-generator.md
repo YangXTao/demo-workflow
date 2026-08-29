@@ -21,7 +21,9 @@ For the director request, upload only the accepted **character and prop** refere
 
 ## 3. Obtain the canonical director prompt from Doubao
 
-In the already signed-in Doubao **desktop app**, create a **new conversation**. Choose `工作任务` → `本地电脑` → `技能/cinematic-storyboard-prompt-generator`, then select **豆包 2.1 Turbo 高** before submitting the director request. This model choice applies only to the prompt-generation task. Do not use the Doubao website for this stage: the website is reserved for later `Seedance 2.0 Fast` video production. The Chrome two-tab cap applies only to browser image/video work, not to this desktop-app director task.
+In the already signed-in Doubao **desktop app**, create a **new conversation**. Choose `工作任务` → `本地电脑` → `技能/cinematic-storyboard-prompt-generator`, then select **豆包 2.1 Turbo 高** before submitting the director request. This model choice applies only to the prompt-generation task.
+
+If the desktop-app control channel cannot bind after its bounded recovery, use the user's already signed-in **incognito Doubao website** instead: create a new conversation and choose `工作任务` → `云电脑` → `技能/cinematic-storyboard-prompt-generator`, then select **豆包 2.1 Turbo 高**. This fallback is only for director-prompt generation; actual Seedance production still uses the established Doubao website video flow. Treat the current website state as authoritative, keep the Chrome cap, and do not switch accounts or reopen a normal-window session merely to recover the director task.
 
 Upload the ledger-selected character/prop images once in the declared order. Then submit one request containing:
 
