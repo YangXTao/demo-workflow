@@ -21,7 +21,7 @@ For the director request, upload only the accepted **character and prop** refere
 
 ## 3. Obtain the canonical director prompt from Doubao
 
-In the already signed-in Doubao app, create a **new conversation**. Choose `工作任务` → `本地电脑` → `技能/cinematic-storyboard-prompt-generator`. Use the user-authorized browser flow and preserve the configured tab cap.
+In the already signed-in Doubao app, create a **new conversation**. Choose `工作任务` → `本地电脑` → `技能/cinematic-storyboard-prompt-generator`, then select **豆包 2.1 Turbo 高** before submitting the director request. This model choice applies only to the prompt-generation task; later video production remains `Seedance 2.0 Fast`. Use the user-authorized browser flow and preserve the configured tab cap.
 
 Upload the ledger-selected character/prop images once in the declared order. Then submit one request containing:
 
