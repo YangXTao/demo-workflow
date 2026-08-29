@@ -42,9 +42,16 @@ Use this request skeleton, replacing only bracketed values:
 生成第[章节号]章分镜，[文戏/打戏/混合叙事]型，修仙版，旁白模式B，打戏段无BGM，文戏段可加BGM。
 ```
 
+### 镜头数量硬约束
+
+每章默认产出 **9–10 个、每个 10 秒**的 S01 式镜头。先用 9–10 镜覆盖开场、信息推进、关键冲突/转折、反应和结尾，不得为了凑时长重复同一动作、台词、揭示或反应。
+
+只有在保留完整原文台词、关键因果、必要的空间转场或签名场面阶段时，9–10 镜确实放不下，才可酌情扩至 **11–13 镜**；扩镜前必须确认每个新增镜头拥有不同的戏剧任务和新的不可逆结束状态。不得超过 13 镜，除非用户明确要求。镜头数限制绝不授权删减原文关键事实或截断台词。
+
 The returned document is acceptable only when every shot has the cinematic file-style structure exemplified by the user-approved reference:
 
 - a numbered `S01`-style heading with a 10-second start/end time range and shot title;
+- **9–10 个镜头**；仅在上述硬约束成立时允许 11–13 个，且每镜都必须推进到不同的新状态；
 - `【上一镜尾帧衔接】`, including opening/no-tail or a precise predecessor end state;
 - `①画质基准`, `②角色・场景・核心设定`, `③时间轴`, and `④负面提示词`;
 - an ordered image mapping for every supplied reference and a real 10-second causal timeline;
