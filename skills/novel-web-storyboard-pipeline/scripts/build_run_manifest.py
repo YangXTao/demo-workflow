@@ -23,9 +23,15 @@ from workflow_common import (
 
 PROMPT_HEADING = re.compile(r"^(?P<id>(?:CHAR|LOOK|PROP|LOC)-\d+-P\d+)\s*\|\s*(?P<title>.+)$")
 SHOT_HEADING = re.compile(r"^(?P<id>SG-\d+)\s*\|\s*duration=(?P<duration>[0-9.]+)s\b", re.I)
+DIRECTOR_SHOT_HEADING = re.compile(
+    r"^S(?P<index>\d+)\s*[|｜]\s*(?P<start>\d{2}:\d{2})\s*[—–-]\s*(?P<end>\d{2}:\d{2})\b",
+    re.I,
+)
 REFERENCE_FILE = re.compile(r"`([^`]+\.(?:png|jpe?g|webp|bmp))`", re.I)
 SHOT_ID = re.compile(r"SG-\d+", re.I)
-BINDING = re.compile(r"(?m)^\s*-\s*@图片(?P<order>\d+)\s*[：:]\s*(?P<text>.+?)\s*$")
+BINDING = re.compile(r"(?mi)^\s*-\s*@(?:图片|image)(?P<order>\d+)\s*[：:=＝]\s*(?P<text>.+?)\s*$")
+DIRECT_BINDING = re.compile(r"(?mi)^\s*@(?:图片|image)(?P<order>\d+)\s*[：:=＝]\s*(?P<text>.+?)\s*$")
+REVERSE_BINDING = re.compile(r"(?mi)(?P<text>[^。\n]{1,100}?)\s*=\s*@(?:图片|image)(?P<order>\d+)\b")
 ASSET_ROW = re.compile(
     r"^\|(?P<id>(?:CHAR|LOOK|PROP|LOC)-\d{3})\|(?P<title>[^|]+)\|(?P<source>[^|]+)\|[^|]*\|(?P<shots>[^|]+)\|\s*$",
     re.MULTILINE,
@@ -115,28 +121,58 @@ def parse_reusable_assets(path: Path, image_dir: Path, prompt_assets: list[dict[
 
 def _transition(prompt: str) -> str:
     block = prompt.split("【首帧与上镜承接】", 1)[-1].split("【", 1)[0]
+    if "【首帧与上镜承接】" not in prompt:
+        block = prompt.split("【上一镜尾帧衔接】", 1)[-1].split("【", 1)[0]
     for value in ("尾帧直续", "章节开场", "匹配切", "时空硬切"):
         if value in block:
             return value
+    if "无上一镜" in block or "开场第一镜" in block:
+        return "章节开场"
+    if "上一镜结尾" in block or "尾帧" in block:
+        return "尾帧直续"
     return "未声明"
+
+
+def _clock_seconds(value: str) -> float:
+    minutes, seconds = value.split(":", 1)
+    return float(int(minutes) * 60 + int(seconds))
+
+
+def _bindings(prompt: str) -> list[dict[str, Any]]:
+    """Read both legacy @图片N bullets and the canonical S01 file style."""
+    chosen: dict[int, str] = {}
+    for pattern in (BINDING, DIRECT_BINDING, REVERSE_BINDING):
+        for item in pattern.finditer(prompt):
+            order = int(item.group("order"))
+            text = item.group("text").strip()
+            if order not in chosen and text:
+                chosen[order] = text
+    return [{"order": order, "description": chosen[order]} for order in sorted(chosen)]
 
 
 def parse_shots(path: Path) -> list[dict[str, Any]]:
     shots: list[dict[str, Any]] = []
     for heading, section in split_markdown_h2(read_text(path)):
         match = SHOT_HEADING.match(heading)
-        if not match:
+        director_match = DIRECTOR_SHOT_HEADING.match(heading) if not match else None
+        if not match and not director_match:
             continue
-        prompt = code_block_after(section)
+        if match:
+            shot_id = match.group("id").upper()
+            duration = float(match.group("duration"))
+        else:
+            assert director_match is not None
+            shot_id = f"SG-{int(director_match.group('index')):03d}"
+            duration = _clock_seconds(director_match.group("end")) - _clock_seconds(director_match.group("start"))
+            if duration <= 0:
+                raise ValueError(f"{heading} has a non-positive canonical S-shot duration")
+        prompt = code_block_after(section) or section
         shots.append(
             {
-                "shot_id": match.group("id").upper(),
-                "duration_seconds": float(match.group("duration")),
+                "shot_id": shot_id,
+                "duration_seconds": duration,
                 "transition": _transition(prompt),
-                "bindings": [
-                    {"order": int(item.group("order")), "description": item.group("text").strip()}
-                    for item in BINDING.finditer(prompt)
-                ],
+                "bindings": _bindings(prompt),
                 "prompt": prompt,
             }
         )

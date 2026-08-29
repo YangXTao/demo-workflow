@@ -1,13 +1,13 @@
 ---
 name: novel-web-storyboard-pipeline
-description: Orchestrate one or two Chinese novel chapters into reusable image assets and Seedance 2.0 Fast storyboard videos by calling novel-chapter-3d-pipeline, generating missing images only through the signed-in ChatGPT website, and generating videos only through the signed-in Doubao website. Use for unattended chapter production, asset reuse, per-character chat isolation, Doubao account rotation, tail-frame continuity, resumable downloads, or completion audits. Do not use for prompt-only requests or API-based image/video generation.
+description: Orchestrate one or two Chinese novel chapters into canonical Doubao-directed storyboard prompts, reusable image assets, and Seedance 2.0 Fast videos. Use for unattended chapter production, chapter prompt generation, asset reuse, per-character chat isolation, Doubao account rotation, tail-frame continuity, resumable downloads, or completion audits. Do not use for API-based image/video generation.
 ---
 
 # Novel Web Storyboard Pipeline
 
 ## Purpose
 
-Run a resumable browser production workflow for at most two chapters per run. Preserve the user's chosen web-only surfaces: ChatGPT for images and Doubao Seedance 2.0 Fast for videos. Never substitute an API.
+Run a resumable browser production workflow for at most two chapters per run. When the user asks for storyboard prompts or end-to-end production from novel text, first obtain the canonical cinematic prompt document through Doubao's installed `cinematic-storyboard-prompt-generator` skill, then derive the package, assets, and Seedance production from that accepted document. Preserve the user's chosen web-only surfaces: ChatGPT for images and Doubao Seedance 2.0 Fast for videos. Never substitute an API.
 
 This skill coordinates `novel-chapter-3d-pipeline`; it does not duplicate that skill's adaptation or prompt-writing rules. If that dependency is unavailable, stop before production and report it.
 
@@ -26,12 +26,13 @@ This skill coordinates `novel-chapter-3d-pipeline`; it does not duplicate that s
 ## Start every run
 
 1. Read [workflow.md](references/workflow.md).
-2. Read [chatgpt-image-flow.md](references/chatgpt-image-flow.md) before generating images.
-3. Read [doubao-video-flow.md](references/doubao-video-flow.md) before submitting videos.
-4. Read [seedance-cinematic-prompt-craft.md](references/seedance-cinematic-prompt-craft.md), [cinematic-seedance-production-knowledge.md](references/cinematic-seedance-production-knowledge.md), and [cinematic-production-knowledge-catalog.md](references/cinematic-production-knowledge-catalog.md) before generating, expanding, revising, submitting, or auditing combat, spell, giant-form, disaster, army, or other spectacle shots. For any **medium-or-larger conflict, combat, weapon action, spell, VFX, artifact-rain, formation, Dharma-image, giant beast, disaster, chase, or finishing** shot, also read [v8-effects-combat-magic-integration.md](references/v8-effects-combat-magic-integration.md) and apply its V8 routing gate. For prose-first shots that use V8 camera language, read that reference's `全镜通用运镜` section only; do not load combat rules merely to improve a dialogue shot. A genuinely minor conflict (for example: one brief verbal friction, a small restrained gesture, or a low-stakes reaction without a new physical or supernatural action) may use the existing concise treatment instead. `cinematic-seedance-production-knowledge.md` remains the active unified movie-language knowledge base: its first part contains authoritative unified rules and its later part contains detailed technique material subject to those rules. Never read `references/archive/` during production.
-5. Load the project configuration. If absent, copy `assets/config.example.json` to `<project>/.workflow/config.json`, set `project_root`, and preserve user overrides.
-6. Run `scripts/preflight.py` for the requested one or two chapter directories. Do not submit work while a hard preflight error remains.
-7. Initialize or refresh the asset index with `scripts/build_asset_index.py`.
+2. When generating chapter prompts or producing a chapter from source text, read [doubao-cinematic-storyboard-generator.md](references/doubao-cinematic-storyboard-generator.md) before package generation. This is the canonical planning route; it classifies the chapter, records reusable images, obtains the user-required S01-style prompt file through Doubao, and derives the screenplay and missing asset plan.
+3. Read [chatgpt-image-flow.md](references/chatgpt-image-flow.md) before generating images.
+4. Read [doubao-video-flow.md](references/doubao-video-flow.md) before submitting videos.
+5. Read [seedance-cinematic-prompt-craft.md](references/seedance-cinematic-prompt-craft.md), [cinematic-seedance-production-knowledge.md](references/cinematic-seedance-production-knowledge.md), and [cinematic-production-knowledge-catalog.md](references/cinematic-production-knowledge-catalog.md) before generating, expanding, revising, submitting, or auditing combat, spell, giant-form, disaster, army, or other spectacle shots. For any **medium-or-larger conflict, combat, weapon action, spell, VFX, artifact-rain, formation, Dharma-image, giant beast, disaster, chase, or finishing** shot, also read [v8-effects-combat-magic-integration.md](references/v8-effects-combat-magic-integration.md) and apply its V8 routing gate. For prose-first shots that use V8 camera language, read that reference's `全镜通用运镜` section only; do not load combat rules merely to improve a dialogue shot. A genuinely minor conflict (for example: one brief verbal friction, a small restrained gesture, or a low-stakes reaction without a new physical or supernatural action) may use the existing concise treatment instead. `cinematic-seedance-production-knowledge.md` remains the active unified movie-language knowledge base: its first part contains authoritative unified rules and its later part contains detailed technique material subject to those rules. Never read `references/archive/` during production.
+6. Load the project configuration. If absent, copy `assets/config.example.json` to `<project>/.workflow/config.json`, set `project_root`, and preserve user overrides.
+7. Run `scripts/preflight.py` for the requested one or two chapter directories. Do not submit work while a hard preflight error remains.
+8. Initialize or refresh the asset index with `scripts/build_asset_index.py`.
 
 ### Chapter-preparation hard gate
 
@@ -45,9 +46,11 @@ For every combat, spiritual-beast, spell, giant-form, or finishing-action group,
 
 ### 1. Build and validate chapter packages
 
-For each requested chapter, call `novel-chapter-3d-pipeline` on its readable chapter text. Store its seven-file package in the chapter's configured asset directory. Run that skill's validator and continue only after it passes.
+For each requested chapter, first determine whether the user supplied an accepted valid seven-file package. If not, or if the user asks to create storyboard prompts from chapter text, run the Doubao director route in [doubao-cinematic-storyboard-generator.md](references/doubao-cinematic-storyboard-generator.md): classify the narrative, make the existing-asset ledger, obtain and structurally review the canonical S01-style prompt document, save it as `07-seedance-2-fast-prompts.md`, and derive `02-screenplay.md`, `03-assets.md`, and `04-gpt-image-2-prompts.md` from it. Then call `novel-chapter-3d-pipeline` only for package fields the accepted director document does not supply, without replacing the accepted canonical prompt.
 
-If a complete valid package already exists, reuse it unless the user asks to regenerate it.
+Store the completed seven-file package in the chapter's configured asset directory. Run that skill's validator on the base package before replacing its generic prompt file. After the accepted S01-style director document is saved as the canonical `07-seedance-2-fast-prompts.md`, validate it with the structure gate in `doubao-cinematic-storyboard-generator.md` and the manifest adapter (`build_run_manifest.py`); do not reject the canonical document merely because an older package validator only recognizes legacy `SG-001 | duration=...` headings. Preserve `10-资产复用台账.md` as the supplemental reuse record.
+
+If a complete valid package already exists, reuse it unless the user asks to regenerate it. When the user specifically asks for a new chapter's storyboard prompts, that request authorizes the director route and supersedes reuse of the old `07-seedance-2-fast-prompts.md`; preserve the old file as a numbered version rather than overwriting it blindly.
 
 The screenplay must place a compact `角色境界与战力状态` table before the scene list. Each row includes character, realm/state, source basis, combat implication, and allowed visual expression. Keep it synchronized with `03-assets.md`, `05-storyboard-video-prompts.md`, and `07-seedance-2-fast-prompts.md`.
 
@@ -74,7 +77,7 @@ Save accepted assets with the rules in [naming-and-state.md](references/naming-a
 
 ### 4. Generate videos in Doubao
 
-Use only the Doubao website. Select `Seedance 2.0 Fast`, `16:9`, and the manifest duration for each shot. Upload images in the exact `@图片1` to `@图片N` order from the manifest, then submit the complete corresponding prompt.
+Use only the Doubao website. For a canonical director-generated chapter, select `生成视频`, `Seedance 2.0 Fast`, `16:9`, and `10s` for every shot unless the user explicitly set a different duration; otherwise use the manifest duration. Upload images in the exact `@图片1` to `@图片N` order from the manifest. Prepend the user-visible prompt with an `@imageN = 角色/道具/场景` legend that exactly describes each uploaded binding; when the first binding is a direct-continuation tail frame, write `@image1 = S[previous-shot]尾帧`. Then submit the complete corresponding canonical prompt without shortening it.
 
 Prompt completeness takes priority over brevity. For combat or spectacle shots, keep the full structured long prompt: a continuous time axis, action cause-and-effect, motivated camera changes, layered VFX and lighting, environment response, sound, exact end state, and shot-specific failure prohibitions. Do not shorten away execution-critical detail merely because another prompt looks shorter, and do not compensate with conflicting quality slogans.
 

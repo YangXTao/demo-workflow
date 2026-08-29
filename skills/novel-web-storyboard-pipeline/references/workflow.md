@@ -6,7 +6,15 @@ One run accepts one or two explicit chapter directories. It never scans every ch
 
 ## State order
 
+Direct-package route:
+
 `package_pending` -> `package_valid` -> `assets_resolving` -> `images_generating` -> `images_ready` -> `video_ready` -> `video_submitted` -> `video_downloaded` -> `video_valid` -> `complete`
+
+Doubao director route (when the user asks for chapter storyboard prompts or end-to-end generation from source text):
+
+`director_prompt_pending` -> `narrative_classified` -> `reuse_ledger_ready` -> `director_prompt_submitted` -> `director_prompt_valid` -> `screenplay_derived` -> `package_valid` -> `assets_resolving` -> `images_generating` -> `images_ready` -> `video_ready` -> `video_submitted` -> `video_downloaded` -> `video_valid` -> `complete`
+
+The canonical director response is stored in `07-seedance-2-fast-prompts.md`; `10-资产复用台账.md` records the chapter classification and accepted existing character, prop, and location assets. Do not permit asset or video submission while the canonical director prompt is absent, structurally incomplete, or not yet saved.
 
 ## SQLite state keys
 
