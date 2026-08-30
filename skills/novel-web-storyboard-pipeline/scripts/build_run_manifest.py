@@ -166,6 +166,8 @@ def parse_shots(path: Path) -> list[dict[str, Any]]:
             duration = _clock_seconds(director_match.group("end")) - _clock_seconds(director_match.group("start"))
             if duration <= 0:
                 raise ValueError(f"{heading} has a non-positive canonical S-shot duration")
+            if abs(duration - 10.0) > 0.001:
+                raise ValueError(f"{heading} must be exactly 10 seconds in canonical director mode")
         prompt = code_block_after(section) or section
         shots.append(
             {
@@ -362,7 +364,12 @@ def build_manifest(config_path: Path, chapter_dir: Path, asset_index_path: Path 
             "chatgpt_model": config.get("chatgpt", {}).get("model"),
             "doubao_model": config.get("doubao", {}).get("model"),
             "ratio": config.get("doubao", {}).get("ratio"),
+            "duration_seconds": config.get("doubao", {}).get("duration_seconds", 10),
             "account_generation_limit": config.get("account_generation_limit", 3),
+            "start_video_with_director_account": config.get("start_video_with_director_account", True),
+            "default_director_account": config.get("director_prompt", {}).get(
+                "default_account_label", "用户867998"
+            ),
             "reserved_last_account": config.get("reserved_last_account", "fei-1"),
             "reserved_tail_accounts": config.get(
                 "reserved_tail_accounts", ["yindu-1", "yindu-2", config.get("reserved_last_account", "fei-1")]

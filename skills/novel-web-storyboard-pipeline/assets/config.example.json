@@ -14,6 +14,7 @@
   "reserved_last_account": "fei-1",
   "reserved_tail_accounts": ["yindu-1", "yindu-2", "fei-1"],
   "account_generation_limit": 3,
+  "start_video_with_director_account": true,
   "browser": {
     "family": "chrome",
     "profile_directory": "Default",
@@ -30,10 +31,18 @@
     "url": "https://www.doubao.com/",
     "model": "Seedance 2.0 Fast",
     "ratio": "16:9",
+    "duration_seconds": 10,
     "max_images_per_shot": 9,
     "watermark_free_resource": "latest",
     "auto_confirm_generation_dialogs": false,
     "pending_stale_minutes": 60
+  },
+  "director_prompt": {
+    "default_account_label": "用户867998",
+    "allow_user_selected_account": true,
+    "surface": "网页版豆包（普通 Chrome）→ 工作任务 → 云电脑",
+    "model": "豆包 2.1 Turbo 高",
+    "skill": "Cinematic Storyboard Prompt Generator"
   },
   "aliases": {
     "沈清梧": "沈青梧"

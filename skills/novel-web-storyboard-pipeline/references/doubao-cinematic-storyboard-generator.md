@@ -21,9 +21,11 @@ For the director request, upload only the accepted **character and prop** refere
 
 ## 3. Obtain the canonical director prompt from Doubao
 
-In the already signed-in Doubao **desktop app**, create a **new conversation**. Choose `工作任务` → `本地电脑` → `技能/cinematic-storyboard-prompt-generator`, then select **豆包 2.1 Turbo 高** before submitting the director request. This model choice applies only to the prompt-generation task.
+In the already signed-in **ordinary Chrome Doubao website**, create a **new conversation**. Choose `工作任务` → `云电脑` → `技能/cinematic-storyboard-prompt-generator`, then select **豆包 2.1 Turbo 高** before submitting the director request. This model choice applies only to the prompt-generation task.
 
-If the desktop-app control channel cannot bind after its bounded recovery, use the user's already signed-in **incognito Doubao website** instead: create a new conversation and choose `工作任务` → `云电脑` → `技能/cinematic-storyboard-prompt-generator`, then select **豆包 2.1 Turbo 高**. This fallback is only for director-prompt generation; actual Seedance production still uses the established Doubao website video flow. Treat the current website state as authoritative, keep the Chrome cap, and do not switch accounts or reopen a normal-window session merely to recover the director task.
+Resolve the director account before opening the skill menu: use an account explicitly named by the user for that run; otherwise use `director_prompt.default_account_label`, currently `用户867998`. Treat the rendered label as authoritative and require an exact match. The resolved account must visibly offer `Cinematic Storyboard Prompt Generator`; if it does not, stop instead of using a similarly named skill or silently switching accounts. Keep the Chrome cap. Actual Seedance production still uses the established Doubao website video flow.
+
+Record the verified label as `director_account`. Director-prompt generation does not consume one of the account's three Seedance video uses. After the returned document passes the structure gate and is saved, initialize `video_account` to this same account by default; consume its remaining Seedance quota before rotating to another account.
 
 Upload the ledger-selected character/prop images once in the declared order. Then submit one request containing:
 
@@ -57,16 +59,16 @@ The returned document is acceptable only when every shot has the cinematic file-
 - `【上一镜尾帧衔接】`, including opening/no-tail or a precise predecessor end state;
 - `①画质基准`, `②角色・场景・核心设定`, `③时间轴`, and `④负面提示词`;
 - an ordered image mapping for every supplied reference and a real 10-second causal timeline;
-- concrete staging, character voice and lip-sync requirements where dialogue occurs, sound/BGM routing, continuity/end state, and applicable V8 spectacle detail without contradicting plot facts;
+- concrete staging, character voice and lip-sync requirements where dialogue occurs, sound/BGM routing, continuity/end state, and all action/VFX detail required by the source without contradicting plot facts;
 - no missing shot indices, vague placeholders, bare adjective lists, or a generic summary in place of time-coded production instructions.
 
-For a prose shot, accept restrained V8 camera language without requiring battle density. For a combat or mixed conflict beat, require the established V8/Seedance long-prompt gate, readable cause/contact/consequence, and the relevant voice baselines. The reference defines the **document structure and specificity**, not mandatory fixed color values, cameras, effect counts, or spectacle for every shot.
+The returned document is the sole production source for its video-prompt bodies. It must itself provide the required camera, action, effect, staging, voice, continuity, and end-state detail. Do not rely on legacy prompt sets or later local prompt expansion to fill gaps.
 
 If the response is structurally incomplete, instruct the same skill conversation to regenerate it in the required structure. Do not upload the references again. Do not begin image or video production until a complete canonical prompt is saved and reviewed.
 
 ## 4. Save and derive the package
 
-Save the accepted unabridged returned prompt to `<chapter>/资产/07-seedance-2-fast-prompts.md`. Preserve its `S01`-style sections and do not shorten production-critical detail. Also derive and save:
+Save the accepted unabridged returned prompt to `<chapter>/资产/07-seedance-2-fast-prompts.md`. Preserve its `S01`-style sections and do not shorten production-critical detail. Once the structure check passes, every SG body is immutable: derive supporting files from it, but never alter it locally.
 
 - `02-screenplay.md`: a chapter production screenplay derived from the accepted prompt and checked against the source novel. It must retain plot facts, dialogue, roles, realms/states, progression, and end states; it may not invent a different story.
 - `03-assets.md` and `04-gpt-image-2-prompts.md`: update with every required missing character state, prop, and location identified by the accepted prompt.
@@ -77,7 +79,7 @@ Preserve the required seven-package-file contract. Add `10-资产复用台账.md
 
 Generate missing visual assets only through the signed-in ChatGPT website. Every human-character task must use the project’s accepted four-view turnaround format: front, left, rear, and right views in one clean readable reference sheet, with identity, costume/state, anatomy, and silhouette consistent across all four views; no watermark or unrelated text. Follow the existing fresh-chat, identity-isolation, visual-review, and naming rules.
 
-Rebuild the manifest from the accepted canonical prompt after assets resolve. The manifest adapter accepts canonical `S01｜00:00—00:10` headings and maps them to `SG-001`, `SG-002`, and so on. Use 10 seconds, `Seedance 2.0 Fast`, and `16:9` for this director-generated mode unless the user explicitly authorizes another duration.
+Rebuild the manifest from the accepted canonical prompt after assets resolve. The manifest adapter accepts canonical `S01｜00:00—00:10` headings and maps them to `SG-001`, `SG-002`, and so on. Use 10 seconds, `Seedance 2.0 Fast`, and `16:9` for this director-generated mode. Start on `director_account`; after its third officially acknowledged video job in the current quota cycle, or an earlier visible exhaustion signal, continue the next SG on the next eligible `video_account` without changing the canonical SG body.
 
 For every SG, upload only its ordered manifest bindings. Prepend the submitted video prompt with the binding legend:
 
@@ -86,7 +88,7 @@ For every SG, upload only its ordered manifest bindings. Prepend the submitted v
 @image2 = [角色/道具/场景名称]
 ```
 
-For a direct continuation, the first line must instead state `@image1 = S[前一镜编号]尾帧`, followed by the remaining image legend. Then keep the canonical prompt body intact. Select `生成视频` → `Seedance 2.0 Fast` → `16:9` → `10s`, submit only after the binding thumbnails match the legend, wait for the official acknowledgement, download the top watermark-free `视频1`, validate, extract the tail when the next SG requires it, and proceed sequentially.
+For a direct continuation, the first line must instead state `@image1 = S[前一镜编号]尾帧`, followed by the remaining image legend. Then keep the canonical prompt body byte-for-byte intact: do not use a legacy prompt file, external rule, or a local rewrite to alter it. Select `生成视频` → `Seedance 2.0 Fast` → `16:9` → `10s`, submit only after the binding thumbnails match the legend, wait for the official acknowledgement, download the top watermark-free `视频1`, validate, extract the tail when the next SG requires it, and proceed sequentially.
 
 ## 6. Completion review
 

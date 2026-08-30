@@ -6,7 +6,8 @@ For the current shot, verify:
 
 - The selected model visibly reads `Seedance 2.0 Fast`.
 - Ratio visibly reads `16:9`.
-- Duration matches the manifest.
+- Duration visibly reads `10s` for this director-generated workflow.
+- The visible account label exactly matches the current `video_account` cursor.
 - Every required image exists and the count does not exceed the configured safe maximum.
 - Upload order exactly matches `@图片1` through `@图片N`.
 - Each binding's visual identity matches its description and referenced prompt role, not merely its filename or existence check. A character binding for 咪咪, for example, must resolve to the accepted 咪咪 asset rather than another existing creature asset.
@@ -23,11 +24,11 @@ After `setFiles`, visually verify that the attachment strip has exactly the mani
 
 ## Dialogue fit and anti-intersection gate
 
-For combat, spell, giant-form, disaster, army, or other spectacle shots, read `seedance-cinematic-prompt-craft.md` and apply its long-prompt gate before submission. Do not trim a structured prompt merely to make it visually short. Verify the continuous time axis, physical action chain, scale reference, VFX layers, light direction and exposure protection, environment response, exact ending, and shot-specific prohibitions. If the requested beats cannot fit the selected duration without conflicts, return the shot for splitting rather than submitting an overloaded prompt.
+For every shot, submit the accepted `07` SG body unchanged. Before accepting `07`, reject any insufficient or internally contradictory SG in the same web director conversation. After acceptance, time axis, action chain, staging, stated effects, environment response, ending, and negative constraints are QC criteria only; never add, remove, or rewrite prompt text locally.
 
-Before sending a spoken prompt, verify that each complete line can be delivered in the selected duration. When it cannot, retain the complete line and specify the character's locked voice plus a controlled accelerated rate of 1.10–1.50x selected for dialogue density, emotion, and intelligibility, with no trailing unfinished words. Do not reduce the duration to force a cutoff. If that rate remains insufficient, return the shot to storyboard splitting rather than submitting a line that will not finish.
+Before accepting `07`, verify that each complete spoken line and its voice direction fit the 10-second SG. Once `07` is accepted, do not add or alter a voice, rate, line, or timing instruction during video submission.
 
-Before sending any prompt with two or more characters, add explicit staging in the prompt: screen-left/center/right or foreground/midground/background positions, movement directions, separate vertical or depth lanes, and a stable camera axis. Stagger motions so only one close-range action occupies a contact zone at a time. Prefer an insert or reaction cut for a handoff, pet interaction, weapon clash, or landing. Explicitly forbid body, robe, limb, weapon, mount, and ground-plane intersection; do not use blur, smoke, white flashes, or dense particles to conceal a collision.
+Before accepting `07`, verify that every two-or-more-character SG already defines readable staging and avoids intersection risks. Once accepted, use those details only for QC; do not add or alter staging during video submission.
 
 After upload or submission, inspect any visible confirmation dialog. When `doubao.auto_confirm_generation_dialogs` is enabled and the dialog only confirms using the uploaded materials or continuing the already-authorized video generation, click its confirm button automatically. Do not auto-confirm login, CAPTCHA, payment, purchase, permission-sharing, quota-upgrade, or materially changed generation settings.
 
@@ -35,7 +36,7 @@ After an ordinary material-safety confirmation, record a shot as submitted and i
 
 For the reserved tail accounts `yindu-1`, `yindu-2`, and `fei-1`, the user authorizes a bounded recovery policy for that exact no-job state: re-submit the same fully verified shot in the current conversation up to **10 total submissions**. For every retry after the first, use Doubao's edit action on the original submission and send it again; retain its already-verified attachments and do not upload the same images again. When the interface offers `重新生成` after a chat-only response, select it first and then edit and resend the original prompt; this preserves the working generation path and its verified attachments. If none creates the official acknowledgement, use a clean new conversation **in the same user-designated, proven Doubao tab/window** and repeat. Create at most **10 conversations** for that account/shot. Between every attempt inspect the visible job state and resource panel; never send again while a job may exist. After the 10-by-10 budget is exhausted, mark the shot failed for that account and stop that account's chain. This policy does not authorize retries for login, CAPTCHA, payment, quota upgrade, model removal, or changed page rules.
 
-If Doubao reports `生成内容中疑似包含侵权 / 违规内容` and explicitly says the generation quota was not deducted, retain the failed request and treat it as a recoverable no-result. In the same conversation, edit the original submitted message and keep its verified attachments. Replace ambiguous named-IP references, graphic-harm wording, or dense attack wording with original descriptive visual language while retaining the scene's staging, continuity, duration, and spectacle requirements; then submit again and require the official job acknowledgement. Do not silently substitute a different model or re-upload assets.
+If Doubao reports `生成内容中疑似包含侵权 / 违规内容` and explicitly says the generation quota was not deducted, retain the failed request and mark it as a policy no-result. Do not rewrite the accepted SG locally. Continue only with an exact resubmission when the page explicitly permits it; otherwise record the blocked shot and continue independent work.
 
 ## Submission and wait
 
@@ -55,16 +56,20 @@ When the next shot is `尾帧直续`, run `scripts/media_tools.py extract-tail`.
 
 ## Battle visual QC and rework
 
-After every chapter is downloaded, visually sample the battle setup, primary attack, impact/aftermath, and any spectacle reveal. Pass only when the shots show readable action cause and effect plus a cinematic hierarchy of energy: substantial volumetric light, environmental reaction, layered particles/debris, directional shock or pressure effects, and a scale contrast appropriate to the scene. A named ultimate move or heavenly spectacle must not degrade into isolated glow lines, sparse sparks, a white flash, an unlit close-up, or an explosion that ends before its environmental and character consequences are visible. Apply the full acceptance gates in `seedance-cinematic-prompt-craft.md`.
+After every chapter is downloaded, visually sample the battle setup, primary attack, impact/aftermath, and any spectacle reveal against the accepted SG. Pass only when the returned video visibly fulfills its stated action cause and effect, effect hierarchy, light, environment response, and consequences. Do not add a separate legacy or V8 acceptance gate.
 
-For a failed battle shot, preserve the original `<chapter>-<shot>.mp4`. Produce a revised prompt that specifies the missing scale, energy layers, light direction, environmental deformation, camera response, and prohibitions against cheap effects. Regenerate it as `<chapter>-<shot>-重制-v1.mp4` (increment the version for later attempts) and use that variant's tail frame for any directly continuous rework. Keep both variants; do not overwrite or delete the original.
+For a failed battle shot, preserve the original `<chapter>-<shot>.mp4`. Re-submit the exact accepted canonical SG body with its required binding legend to obtain a new stochastic result; do not locally revise the body. Save each result as `<chapter>-<shot>-重制-v1.mp4` (increment the version for later attempts) and use that variant's tail frame for any directly continuous rework. Keep both variants; do not overwrite or delete the original.
 
-## Whole-chapter acceptance audit and local repair
+## Whole-chapter acceptance audit and exact-prompt rework
 
 After all canonical videos are available, review every shot in narrative order and record pass/fail. Reject a shot for unfinished dialogue, serious visual cheating, identity/costume discontinuity, anatomy failure, intersection or clipping, unwanted duplicate/disappearing subjects, broken spatial logic, or a direct-continuation state mismatch. For battle shots also reject insufficient energy layering, weak light/shadow contrast, missing physical impact, calm pacing, or an unconvincing spectacle scale.
 
-If the failure is confined to a short interval and the frames immediately before and after it are usable, submit a dedicated replacement interval rather than regenerating the whole shot. Use the two surrounding accepted states as first- and last-state references when supported by the current Doubao surface; otherwise state precise matching edit-in and edit-out conditions in the prompt. The interval prompt must identify the exact start/end seconds, camera axis, actor placement, and required repaired action. Save it as `<chapter>-<shot>-局部重制-v<version>-<start>-<end>.mp4`, preserve the original shot, and list it as an editorial insert rather than silently replacing the canonical file. Rebuild the full shot only when the defect spans the beat, breaks dialogue timing or continuity, or cannot cleanly rejoin both sides.
+When a returned video fails QC, preserve it and regenerate the complete SG with the exact same accepted prompt body and required image legend. Do not create a locally rewritten interval prompt or altered full-shot prompt. Save retries as `<chapter>-<shot>-重制-v<version>.mp4` and retain every version.
 
 ## Account rotation
 
-Read the account label from the visible account menu. Maintain local usage, but prefer the page's actual limit signal. After the current account is exhausted, select another available account. Exhaust ordinary accounts first, then use the reserved tail queue `yindu-1` → `yindu-2` → `fei-1`. `fei-1` remains the absolute last account even after future accounts are added. Never store passwords or authentication tokens.
+Record the step-3 account as `director_account` and initialize `video_account = director_account`. Director-prompt generation consumes no Seedance use. Use the same account for consecutive SG submissions until it has three official `视频生成已提交` acknowledgements in the current quota cycle or the page visibly reports exhaustion. If it already used some quota before this run, use only its actual remaining quota.
+
+Switch accounts only after the current job is resolved and downloaded or explicitly failed; never switch while submission state is pending or unknown. On every new account, visibly reselect `生成视频` → `Seedance 2.0 Fast` → `16:9` → `10s`, then continue with the next SG and the unchanged accepted prompt. The new video account does not need `Cinematic Storyboard Prompt Generator`.
+
+After the initial director account, exhaust remaining ordinary accounts before `yindu-1` → `yindu-2` → `fei-1`; `fei-1` remains last among accounts not yet used. If the user explicitly selected a reserved account as the director account for this run, that explicit selection makes it the initial video account; this is the only exception to the normal tail order. Never store passwords or authentication tokens.
